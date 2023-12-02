@@ -12,10 +12,10 @@ import {
   ObtenerUsuarioActual,
   ActualizarUsuario,
 } from "../../actions/UsuarioAction";
-// import { useStateValue } from "../../contexto/store";
+import { useStateValue } from "../../contexto/store";
 
 const PerfilUsuario = () => {
-  //const [{ sesionUsuario }, dispatch] = useStateValue();
+  const [{ sesionUsuario }, dispatch] = useStateValue();
   const [datos, setDatos] = useState({
     nombreCompleto: "",
     email: "",
@@ -25,8 +25,7 @@ const PerfilUsuario = () => {
   });
 
   useEffect(() => {
-    // ObtenerUsuarioActual(dispatch).then((response) => {
-    ObtenerUsuarioActual().then((response) => {
+    ObtenerUsuarioActual(dispatch).then((response) => {
       setDatos(response.data);
     });
   }, []);

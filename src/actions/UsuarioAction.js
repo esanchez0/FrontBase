@@ -28,7 +28,7 @@ export const registrarUsuario = (usuario) => {
   });
 };
 
-export const ObtenerUsuarioActual = () => {
+export const ObtenerUsuarioActual = (dispatch) => {
   return new Promise((resolve, eject) => {
     httpCliente.get("/Usuario").then((response) => {
       // if (response.data && response.data.imagenPerfil) {
@@ -38,11 +38,11 @@ export const ObtenerUsuarioActual = () => {
       //   response.data.imagenPerfil = nuevoFile;
       // }
 
-      // dispatch({
-      //   type: "INICIAR_SESION",
-      //   sesion: response.data,
-      //   autenticado: true,
-      // });
+      dispatch({
+        type: "INICIAR_SESION",
+        sesion: response.data,
+        autenticado: true,
+      });
       resolve(response);
     });
     // .catch((error) => {

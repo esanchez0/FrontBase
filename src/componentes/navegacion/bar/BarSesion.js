@@ -9,7 +9,7 @@ import {
 import React, { useState } from "react";
 import FotoUsuarioTemp from "../../../logo.svg";
 import { makeStyles } from "@mui/styles";
-//import { useStateValue } from "../../../contexto/store";
+import { useStateValue } from "../../../contexto/store";
 import { MenuIzquierda } from "./MenuIzquierda";
 import { MenuDerecha } from "./MenuDerecha";
 import { redirect, useNavigate } from "react-router-dom";
@@ -50,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const BarSesion = () => {
-  //   const [{ sesionUsuario }, dispatch] = useStateValue();
+  const [{ sesionUsuario }, dispatch] = useStateValue();
   const classes = useStyles();
   //   const navigate = useNavigate();
 
@@ -65,7 +65,7 @@ const BarSesion = () => {
       {/* Botones del menu, exclusivos para dispositivos moviles, no se muestran con celular */}
       <div className={classes.seccionDesktop}>
         <Button color="inherit">Salir</Button>
-        <Button color="inherit">{"Nombre de usuario"}</Button>
+        <Button color="inherit">{sesionUsuario? sesionUsuario.usuario.nombreCompleto:""}</Button>
         <Avatar src={FotoUsuarioTemp}></Avatar>
       </div>
 
