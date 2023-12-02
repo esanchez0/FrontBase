@@ -52,30 +52,96 @@ const useStyles = makeStyles((theme) => ({
 const BarSesion = () => {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const classes = useStyles();
-  //   const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const [abrirMenuIzquierda, setAbrirMenuIzquierda] = useState(false);
+
+  const [abrirMenuDerecha, setAbrirMenuDerecha] = useState(false);
+
+  const abrirMenuIzquierdaAction = () => {
+    setAbrirMenuIzquierda(true);
+  };
+
+  const cerrarMenuIzquierda = () => {
+    setAbrirMenuIzquierda(false);
+  };
+
+  const cerrarMenuDerecha = () => {
+    setAbrirMenuDerecha(false);
+  };
+
+  const abrirMenuDerechaAction = () => {
+    setAbrirMenuDerecha(true);
+  };
+
+  const SalirSesionApp = (event) => {
+    event.preventDefault();
+    console.log("salir sesion");
+    // localStorage.removeItem("token_seguridad");
+    // dispatch({
+    //   type: "SALIR_SESION",
+    //   nuevoUsuario: null,
+    //   autenticado: false,
+    // });
+
+    // navigate("/auth/login");
+  };
 
   return (
-    <Toolbar>
-      <IconButton color="inherit">
-        <i className="material-icons">lists</i>
-      </IconButton>
-      <Typography variant="h6">KOC</Typography>
-      <div className={classes.grow}></div>
+    <React.Fragment>
+      <Drawer
+        open={abrirMenuIzquierda}
+        onClose={cerrarMenuIzquierda}
+        anchor="left"
+      >
+        <div
+          className={classes.list}
+          onKeyDown={cerrarMenuIzquierda}
+          onClick={cerrarMenuIzquierda}
+        >
+          <MenuIzquierda classes={classes} />
+        </div>
+      </Drawer>
 
-      {/* Botones del menu, exclusivos para dispositivos moviles, no se muestran con celular */}
-      <div className={classes.seccionDesktop}>
-        <Button color="inherit">Salir</Button>
-        <Button color="inherit">{sesionUsuario? sesionUsuario.usuario.nombreCompleto:""}</Button>
-        <Avatar src={FotoUsuarioTemp}></Avatar>
-      </div>
+      <Drawer
+        open={abrirMenuDerecha}
+        onClose={cerrarMenuDerecha}
+        anchor="right"
+      >
+        <div
+          className={classes.list}
+          onClick={cerrarMenuDerecha}
+          onKeyDown={cerrarMenuDerecha}
+          role="button"
+        >
+          <MenuDerecha
+            classes={classes}
+            salirSesion={SalirSesionApp}
+            usuario={sesionUsuario ? sesionUsuario.usuario : null}
+          />
+        </div>
+      </Drawer>
 
-      {/* Menu exclusivo para dispositivos mobiles, no se muestra en desktop */}
-      <div className={classes.seccionMobile}>
-        <IconButton color="inherit">
-          <i className="material-icons">menu_open</i>
+      <Toolbar>
+        <IconButton color="inherit" onClick={abrirMenuIzquierdaAction}>
+          <i className="material-icons">menu</i>
         </IconButton>
-      </div>
-    </Toolbar>
+        <Typography variant="h6">KOC</Typography>
+        <div className={classes.grow}></div>
+        <div className={classes.seccionDesktop}>
+          <Button onClick={SalirSesionApp} color="inherit">Salir</Button>
+          <Button color="inherit">
+            {sesionUsuario ? sesionUsuario.usuario.nombreCompleto : ""}
+          </Button>
+          <Avatar src={FotoUsuarioTemp}></Avatar>
+        </div>
+        <div className={classes.seccionMobile}>
+          <IconButton color="inherit" onClick={abrirMenuDerechaAction}>
+            <i className="material-icons">more_vert</i>
+          </IconButton>
+        </div>
+      </Toolbar>
+    </React.Fragment>
   );
 };
 
