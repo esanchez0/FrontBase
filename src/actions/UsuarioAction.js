@@ -71,10 +71,10 @@ export const ActualizarUsuario = (usuario) => {
       // });
 
       resolve(response);
-    });
-    // .catch(error => {
-    //   resolve(error.response);
-    // })
+    })
+    .catch(error => {
+      resolve(error.response);
+    })
   });
 };
 

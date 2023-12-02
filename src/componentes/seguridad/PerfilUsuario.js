@@ -43,27 +43,25 @@ const PerfilUsuario = () => {
 
     ActualizarUsuario(datos).then((response) => {
       if (response.status === 200) {
-        // dispatch({
-        //   type: "OPEN_SNACKBAR",
-        //   openMensaje: {
-        //     open: true,
-        //     mensaje: "Se actualizaron exitosamente los cambios.",
-        //   },
-        // });
-        console.log(response.data);
+        dispatch({
+          type: "OPEN_SNACKBAR",
+          openMensaje: {
+            open: true,
+            mensaje: "Se actualizaron exitosamente los cambios.",
+          },
+        });
         window.localStorage.setItem("token_seguridad", response.data.token);
+      } else {
+        dispatch({
+          type: "OPEN_SNACKBAR",
+          openMensaje: {
+            open: true,
+            mensaje:
+              "Errores al intentar guardar en : " +
+              Object.keys(response.data.errors),
+          },
+        });
       }
-      // else {
-      //   dispatch({
-      //     type: "OPEN_SNACKBAR",
-      //     openMensaje: {
-      //       open: true,
-      //       mensaje:
-      //         "Errores al intentar guardar en : " +
-      //         Object.keys(response.data.errors),
-      //     },
-      //   });
-      // }
     });
   };
 
