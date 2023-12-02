@@ -28,7 +28,6 @@ const PerfilUsuario = () => {
     // ObtenerUsuarioActual(dispatch).then((response) => {
     ObtenerUsuarioActual().then((response) => {
       setDatos(response.data);
-      console.log("eder", response.data);
     });
   }, []);
 
