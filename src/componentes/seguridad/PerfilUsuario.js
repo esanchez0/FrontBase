@@ -8,10 +8,10 @@ import {
   Button,
   Grid,
 } from "@mui/material";
-// import {
-//   ObtenerUsuarioActual,
-//   ActualizarUsuario,
-// } from "../../actions/UsuarioAction";
+import {
+  ObtenerUsuarioActual,
+  ActualizarUsuario,
+} from "../../actions/UsuarioAction";
 // import { useStateValue } from "../../contexto/store";
 
 const PerfilUsuario = () => {
@@ -24,12 +24,13 @@ const PerfilUsuario = () => {
     username: "",
   });
 
-  // useEffect(() => {
-  //   ObtenerUsuarioActual(dispatch).then((response) => {
-  //     setDatos(response.data);
-  //     console.log(response.data);
-  //   });
-  // }, []);
+  useEffect(() => {
+    // ObtenerUsuarioActual(dispatch).then((response) => {
+    ObtenerUsuarioActual().then((response) => {
+      setDatos(response.data);
+      console.log("eder", response.data);
+    });
+  }, []);
 
   const IngresarValoresMemoria = (e) => {
     const { name, value } = e.target;
@@ -39,10 +40,33 @@ const PerfilUsuario = () => {
     }));
   };
 
-
   const ActualizarDatos = (e) => {
     e.preventDefault();
-    console.log("eder");
+
+    ActualizarUsuario(datos).then((response) => {
+      if (response.status === 200) {
+        // dispatch({
+        //   type: "OPEN_SNACKBAR",
+        //   openMensaje: {
+        //     open: true,
+        //     mensaje: "Se actualizaron exitosamente los cambios.",
+        //   },
+        // });
+        console.log(response.data);
+        window.localStorage.setItem("token_seguridad", response.data.token);
+      }
+      // else {
+      //   dispatch({
+      //     type: "OPEN_SNACKBAR",
+      //     openMensaje: {
+      //       open: true,
+      //       mensaje:
+      //         "Errores al intentar guardar en : " +
+      //         Object.keys(response.data.errors),
+      //     },
+      //   });
+      // }
+    });
   };
 
   return (

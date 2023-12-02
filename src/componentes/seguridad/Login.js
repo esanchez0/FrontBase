@@ -8,7 +8,7 @@ import {
   Button,
 } from "@mui/material";
 import LockTwoToneIcon from "@mui/icons-material/LockTwoTone";
-// import { loginUsuario } from "../../actions/UsuarioAction";
+import { loginUsuario } from "../../actions/UsuarioAction";
 // import { useStateValue } from "../../contexto/store";
 
 const Login = () => {
@@ -23,6 +23,27 @@ const Login = () => {
       ...anterior,
       [name]: value,
     }));
+  };
+
+  const IniciarSesion = (e) => {
+    e.preventDefault();
+
+    loginUsuario(datos).then((response) => {
+      if (response.status === 200) {
+        console.log("login exitoso!!!", response.data);
+        window.localStorage.setItem("token_seguridad", response.data.token);
+        
+      }
+      //  else {
+      //     dispatch({
+      //       type: "OPEN_SNACKBAR",
+      //       openMensaje: {
+      //         open: true,
+      //         mensaje: "Las credenciales del usuario son incorrectas",
+      //       },
+      //     });
+      //   }
+    });
   };
 
   return (
@@ -60,7 +81,7 @@ const Login = () => {
             variant="contained"
             color="primary"
             style={style.submit}
-            // onClick={IniciarSesion}
+            onClick={IniciarSesion}
           >
             Enviar
           </Button>

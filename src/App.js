@@ -8,8 +8,8 @@ import PerfilUsuario from "./componentes/seguridad/PerfilUsuario";
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <RegistrarUsuario></RegistrarUsuario>
-      {/* <Login></Login> */}
+      {/* <RegistrarUsuario></RegistrarUsuario> */}
+      <Login></Login>
       {/* <PerfilUsuario></PerfilUsuario> */}
     </ThemeProvider>
   );
