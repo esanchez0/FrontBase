@@ -5,6 +5,7 @@ import DatePicker, {
   registerLocale,
   calendarContainer,
 } from "react-datepicker";
+import ListSelector from "./UI/ListSelector";
 
 const TesteoComponentes = () => {
   const [datos, setDatos] = useState({
@@ -58,6 +59,16 @@ const TesteoComponentes = () => {
         withPortal
         showIcon
         dateFormat="yyyy/MM/dd"
+      />
+      <ListSelector
+        //dataSource={estados}       
+        //selectedValue={datos.estadoId}
+        label="Estado:"
+        // onChange={(event, newValue) => {
+        //   changeEstado(newValue);
+        // }}
+        idField="estadoId"
+        textField="nombre"
       />
     </div>
   );
