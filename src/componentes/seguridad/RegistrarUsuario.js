@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Container, Typography, Grid, TextField, Button } from "@mui/material";
 import style from "../Tool/style";
-import {registrarUsuario as Guardar} from '../../actions/UsuarioAction'
-
+import { registrarUsuario as Guardar } from "../../actions/UsuarioAction";
+import { useStateValue } from "../../contexto/store";
 const RegistrarUsuario = () => {
+  const [{ sesionUsuario }, dispatch] = useStateValue();
   const [datos, setDatos] = useState({
     nombreCompleto: "",
     email: "",
@@ -22,10 +23,30 @@ const RegistrarUsuario = () => {
 
   const RegistrarUsuario = (e) => {
     e.preventDefault();
-    Guardar(datos).then(response =>{
-      console.log("Se registro el usuario", response);
-      window.localStorage.setItem("token_seguridad", response.data.token); //Almacenando token
-    })
+    Guardar(datos).then((response) => {
+      if (response.status === 200) {
+        console.log("Se registro el usuario", response);
+        window.localStorage.setItem("token_seguridad", response.data.token); //Almacenando token
+        dispatch({
+          type: "OPEN_SNACKBAR",
+          openMensaje: {
+            open: true,
+            mensaje: "Se actualizaron exitosamente los cambios.",
+          },
+        });
+        window.localStorage.setItem("token_seguridad", response.data.token);
+      } else {
+        dispatch({
+          type: "OPEN_SNACKBAR",
+          openMensaje: {
+            open: true,
+            mensaje:
+              "Errores al intentar guardar en : " +
+              Object.keys(response.data.errors),
+          },
+        });
+      }
+    });
   }; //Termina funcion
 
   return (

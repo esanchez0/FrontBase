@@ -23,12 +23,14 @@ instancia.isCancel = axios.isCancel;
 //la promesa espera hasta la contestacion del servidor
 export const registrarUsuario = (usuario) => {
   return new Promise((resolve, eject) => {
-    instancia.post("/Usuario/registrar", usuario).then((response) => {
-      resolve(response);
-    });
-    // .catch((error) => {
-    //   resolve(error.response);
-    // });
+    instancia
+      .post("/Usuario/registrar", usuario)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        resolve(error.response);
+      });
   });
 };
 
@@ -73,9 +75,9 @@ export const ActualizarUsuario = (usuario, dispatch) => {
         // }
 
         dispatch({
-          type : 'INICIAR_SESION',
-          sesion : response.data,
-          autenticado : true,
+          type: "INICIAR_SESION",
+          sesion: response.data,
+          autenticado: true,
         });
 
         resolve(response);
@@ -88,17 +90,18 @@ export const ActualizarUsuario = (usuario, dispatch) => {
 
 export const loginUsuario = (usuario, dispatch) => {
   return new Promise((resolve, eject) => {
-    instancia.post("/Usuario/login", usuario).then(response => {
-
-      dispatch({
-        type : 'INICIAR_SESION',
-        sesion : response.data,
-        autenticado : true,
+    instancia
+      .post("/Usuario/login", usuario)
+      .then((response) => {
+        dispatch({
+          type: "INICIAR_SESION",
+          sesion: response.data,
+          autenticado: true,
+        });
+        resolve(response);
+      })
+      .catch((error) => {
+        resolve(error.response);
       });
-      resolve(response);
-
-    }).catch(error =>{
-      resolve(error.response);
-    });
   });
 };
