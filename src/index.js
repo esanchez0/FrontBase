@@ -1,6 +1,6 @@
 import React from "react";
+import ReactDOM from "react-dom";
 import App from "./App";
-import ReactDOM from "react-dom/client";
 
 // Librerias para usar el ContextApi(variables globales)
 import { initialState } from "./contexto/initialState"; // variable contenedora de todas las variables
@@ -9,13 +9,13 @@ import { mainReducer } from "./contexto/reducers"; //indice de los reducers, tod
 
 
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
- root.render(
+ReactDOM.render(
   <React.StrictMode>
     <StateProvider initialState={initialState} reducer={mainReducer}>
       <App />
     </StateProvider>
   </React.StrictMode>,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

@@ -11,6 +11,7 @@ import { ObtenerUsuarioActual } from "./actions/UsuarioAction";
 import RegistrarUsuario from "./componentes/seguridad/RegistrarUsuario";
 import Login from "./componentes/seguridad/Login";
 import PerfilUsuario from "./componentes/seguridad/PerfilUsuario";
+import TesteoComponentes from "./componentes/TesteoComponentes"
 
 function App() {
   const [{ sesionUsuario, openSnackbar }, dispatch] = useStateValue();
@@ -56,6 +57,7 @@ function App() {
           <Grid container>
             <Routes>
               <Route exact path="/auth/login" element={<Login></Login>}></Route>
+              <Route exact path="/Test" element={<TesteoComponentes></TesteoComponentes>}></Route>
               {/* <Route
                 exact
                 path="/auth/registrar"
