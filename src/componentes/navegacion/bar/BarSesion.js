@@ -12,7 +12,7 @@ import { makeStyles } from "@mui/styles";
 import { useStateValue } from "../../../contexto/store";
 import { MenuIzquierda } from "./MenuIzquierda";
 import { MenuDerecha } from "./MenuDerecha";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   //Logica para mostrar u ocultar el menu, dependiendo del dispositivo
@@ -75,8 +75,7 @@ const BarSesion = () => {
   };
 
   const SalirSesionApp = (event) => {
-    event.preventDefault();
-    console.log("salir sesion");
+    event.preventDefault();   
     localStorage.removeItem("token_seguridad");
     dispatch({
       type: "SALIR_SESION",

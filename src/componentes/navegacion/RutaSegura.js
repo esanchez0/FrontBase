@@ -1,10 +1,7 @@
 import { useStateValue } from "../../contexto/store";
 import {
   Route,
-  Redirect,
-  Routes,
   useNavigate,
-  BrowserRouter,
 } from "react-router-dom";
 
 function RutaSegura({ component: Component, ...rest }) {

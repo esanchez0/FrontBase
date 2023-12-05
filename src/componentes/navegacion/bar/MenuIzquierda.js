@@ -1,6 +1,6 @@
 import { Divider, List, ListItem, ListItemText } from "@mui/material";
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useStateValue } from "../../../contexto/store";
 
 export const MenuIzquierda = ({ classes }) => {

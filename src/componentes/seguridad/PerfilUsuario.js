@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
 import style from "../Tool/style";
 import {
-  Avatar,
   Container,
   Typography,
   TextField,
   Button,
   Grid,
 } from "@mui/material";
-import {
-  ObtenerUsuarioActual,
+import {  
   ActualizarUsuario,
 } from "../../actions/UsuarioAction";
 import { useStateValue } from "../../contexto/store";
