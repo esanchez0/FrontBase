@@ -25,9 +25,9 @@ const PerfilUsuario = () => {
   });
 
   useEffect(() => {
-    ObtenerUsuarioActual(dispatch).then((response) => {
-      setDatos(response.data);
-    });
+    //ObtenerUsuarioActual(dispatch).then((response) => {
+      setDatos(sesionUsuario.usuario);
+   // });
   }, []);
 
   const IngresarValoresMemoria = (e) => {
@@ -41,7 +41,7 @@ const PerfilUsuario = () => {
   const ActualizarDatos = (e) => {
     e.preventDefault();
 
-    ActualizarUsuario(datos).then((response) => {
+    ActualizarUsuario(datos, dispatch).then((response) => {
       if (response.status === 200) {
         dispatch({
           type: "OPEN_SNACKBAR",

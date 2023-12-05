@@ -30,51 +30,55 @@ export const registrarUsuario = (usuario) => {
 
 export const ObtenerUsuarioActual = (dispatch) => {
   return new Promise((resolve, eject) => {
-    httpCliente.get("/Usuario").then((response) => {
-      // if (response.data && response.data.imagenPerfil) {
-      //   let fotoPerfil = response.data.imagenPerfil;
-      //   const nuevoFile =
-      //     "data:image/" + fotoPerfil.extension + ";base64," + fotoPerfil.data;
-      //   response.data.imagenPerfil = nuevoFile;
-      // }
+    httpCliente
+      .get("/Usuario")
+      .then((response) => {
+        // if (response.data && response.data.imagenPerfil) {
+        //   let fotoPerfil = response.data.imagenPerfil;
+        //   const nuevoFile =
+        //     "data:image/" + fotoPerfil.extension + ";base64," + fotoPerfil.data;
+        //   response.data.imagenPerfil = nuevoFile;
+        // }
 
-      dispatch({
-        type: "INICIAR_SESION",
-        sesion: response.data,
-        autenticado: true,
+        dispatch({
+          type: "INICIAR_SESION",
+          sesion: response.data,
+          autenticado: true,
+        });
+        resolve(response);
+      })
+      // .catch((error) => {
+      //   console.log("error actualizar aqui", error);
+      //   resolve(error);
+      // })
+      .catch((error) => {
+        resolve(error.response);
       });
-      resolve(response);
-    });
-    // .catch((error) => {
-    //   console.log("error actualizar aqui", error);
-    //   resolve(error);
-    // })
-    // .catch((error) => {
-    //   resolve(error.response);
-    // });
   });
 };
 
-export const ActualizarUsuario = (usuario) => {
+export const ActualizarUsuario = (usuario, dispatch) => {
   return new Promise((resolve, eject) => {
-    httpCliente.put("/Usuario", usuario).then((response) => {
-      // if(response.data && response.data.imagenPerfil){
-      //   let fotoPerfil = response.data.imagenPerfil;
-      //   const nuevoFile = 'data:image/' + fotoPerfil.extension + ';base64,' + fotoPerfil.data;
-      //   response.data.imagenPerfil = nuevoFile;
-      // }
+    httpCliente
+      .put("/Usuario", usuario)
+      .then((response) => {
+        // if(response.data && response.data.imagenPerfil){
+        //   let fotoPerfil = response.data.imagenPerfil;
+        //   const nuevoFile = 'data:image/' + fotoPerfil.extension + ';base64,' + fotoPerfil.data;
+        //   response.data.imagenPerfil = nuevoFile;
+        // }
 
-      // dispatch({
-      //   type : 'INICIAR_SESION',
-      //   sesion : response.data,
-      //   autenticado : true,
-      // });
+        dispatch({
+          type : 'INICIAR_SESION',
+          sesion : response.data,
+          autenticado : true,
+        });
 
-      resolve(response);
-    })
-    .catch(error => {
-      resolve(error.response);
-    })
+        resolve(response);
+      })
+      .catch((error) => {
+        resolve(error.response);
+      });
   });
 };
 
