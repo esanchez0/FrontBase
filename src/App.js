@@ -5,7 +5,8 @@ import theme from "./theme/theme";
 import AppNavbar from "./componentes/navegacion/AppNavbar";
 import { Grid, Snackbar } from "@mui/material";
 import { useStateValue } from "./contexto/store";
-// import RutaSegura from "./componentes/navegacion/RutaSegura";
+import RutaSegura from "./componentes/navegacion/RutaSegura";
+import ProtectedRoute from "./componentes/navegacion/ProtectedRoute";
 import { ObtenerUsuarioActual } from "./actions/UsuarioAction";
 import RegistrarUsuario from "./componentes/seguridad/RegistrarUsuario";
 import Login from "./componentes/seguridad/Login";
@@ -55,21 +56,36 @@ function App() {
           <Grid container>
             <Routes>
               <Route exact path="/auth/login" element={<Login></Login>}></Route>
-              <Route
+              {/* <Route
                 exact
                 path="/auth/registrar"
                 element={<RegistrarUsuario></RegistrarUsuario>}
-              ></Route>
-              <Route
+              ></Route> */}
+              {/* <Route
                 exact
                 path="/auth/perfil"
                 element={<PerfilUsuario></PerfilUsuario>}
-              ></Route>
-              <Route
+              ></Route> */}
+              {/* <RutaSegura 
+                exact
+                path="/auth/perfil"
+                component={PerfilUsuario}
+              /> */}
+              {/* <Route
                 exact
                 path="/"
                 element={<PerfilUsuario></PerfilUsuario>}
-              ></Route>
+              ></Route> */}
+              {/* <RutaSegura 
+                exact
+                path="/"
+                element={PerfilUsuario}
+              /> */}
+               <Route element={<ProtectedRoute isAllowed={!!sesionUsuario} />}>
+                <Route path="/" element={<PerfilUsuario />} />  
+                <Route path="/auth/perfil" element={<PerfilUsuario />} />   
+                <Route path="/auth/registrar" element={<RegistrarUsuario />} />    
+              </Route>
             </Routes>
           </Grid>
         </ThemeProvider>

@@ -1,6 +1,10 @@
 import httpCliente from "../servicios/HttpCliente";
 import axios from "axios";
 
+const instancia = axios.create();
+instancia.CancelToken = axios.CancelToken;
+instancia.isCancel = axios.isCancel;
+
 // axios.interceptors.request.use(function(config) {
 //   console.log('request => config ====================================');
 //   console.log(config);
@@ -19,7 +23,7 @@ import axios from "axios";
 //la promesa espera hasta la contestacion del servidor
 export const registrarUsuario = (usuario) => {
   return new Promise((resolve, eject) => {
-    httpCliente.post("/Usuario/registrar", usuario).then((response) => {
+    instancia.post("/Usuario/registrar", usuario).then((response) => {
       resolve(response);
     });
     // .catch((error) => {
@@ -82,10 +86,19 @@ export const ActualizarUsuario = (usuario, dispatch) => {
   });
 };
 
-export const loginUsuario = (usuario) => {
+export const loginUsuario = (usuario, dispatch) => {
   return new Promise((resolve, eject) => {
-    httpCliente.post("/Usuario/login", usuario).then((response) => {
+    instancia.post("/Usuario/login", usuario).then(response => {
+
+      dispatch({
+        type : 'INICIAR_SESION',
+        sesion : response.data,
+        autenticado : true,
+      });
       resolve(response);
+
+    }).catch(error =>{
+      resolve(error.response);
     });
   });
 };

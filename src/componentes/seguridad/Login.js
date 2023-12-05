@@ -9,9 +9,13 @@ import {
 } from "@mui/material";
 import LockTwoToneIcon from "@mui/icons-material/LockTwoTone";
 import { loginUsuario } from "../../actions/UsuarioAction";
-// import { useStateValue } from "../../contexto/store";
+import { redirect, useNavigate } from "react-router-dom";
+import { useStateValue } from "../../contexto/store";
 
 const Login = () => {
+  const [{ usuarioSesion }, dispatch] = useStateValue();
+  const navigate = useNavigate();
+
   const [datos, setDatos] = useState({
     email: "",
     password: "",
@@ -28,21 +32,20 @@ const Login = () => {
   const IniciarSesion = (e) => {
     e.preventDefault();
 
-    loginUsuario(datos).then((response) => {
+    loginUsuario(datos, dispatch).then((response) => {
       if (response.status === 200) {
-        console.log("login exitoso!!!", response.data);
+        //console.log("login exitoso!!!", response.data);
         window.localStorage.setItem("token_seguridad", response.data.token);
-        
+        navigate("/");
+      } else {
+        dispatch({
+          type: "OPEN_SNACKBAR",
+          openMensaje: {
+            open: true,
+            mensaje: "Las credenciales del usuario son incorrectas",
+          },
+        });
       }
-      //  else {
-      //     dispatch({
-      //       type: "OPEN_SNACKBAR",
-      //       openMensaje: {
-      //         open: true,
-      //         mensaje: "Las credenciales del usuario son incorrectas",
-      //       },
-      //     });
-      //   }
     });
   };
 

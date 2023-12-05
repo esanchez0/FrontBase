@@ -77,14 +77,14 @@ const BarSesion = () => {
   const SalirSesionApp = (event) => {
     event.preventDefault();
     console.log("salir sesion");
-    // localStorage.removeItem("token_seguridad");
-    // dispatch({
-    //   type: "SALIR_SESION",
-    //   nuevoUsuario: null,
-    //   autenticado: false,
-    // });
+    localStorage.removeItem("token_seguridad");
+    dispatch({
+      type: "SALIR_SESION",
+      nuevoUsuario: null,
+      autenticado: false,
+    });
 
-    // navigate("/auth/login");
+    navigate("/auth/login");
   };
 
   return (
