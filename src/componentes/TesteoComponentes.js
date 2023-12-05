@@ -60,7 +60,7 @@ const TesteoComponentes = () => {
         showIcon
         dateFormat="yyyy/MM/dd"
       />
-      <ListSelector
+      {/* <ListSelector
         //dataSource={estados}       
         //selectedValue={datos.estadoId}
         label="Estado:"
@@ -69,7 +69,7 @@ const TesteoComponentes = () => {
         // }}
         idField="estadoId"
         textField="nombre"
-      />
+      /> */}
     </div>
   );
 };
