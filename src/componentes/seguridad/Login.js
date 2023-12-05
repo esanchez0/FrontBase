@@ -9,9 +9,8 @@ import {
 } from "@mui/material";
 import LockTwoToneIcon from "@mui/icons-material/LockTwoTone";
 import { loginUsuario } from "../../actions/UsuarioAction";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useStateValue } from "../../contexto/store";
-import TextBox from "../UI/TextBox";
 
 const Login = () => {
   const [{ usuarioSesion }, dispatch] = useStateValue();
@@ -78,18 +77,7 @@ const Login = () => {
             margin="normal"
             onChange={IngresarValoresMemoria}
             value={datos.password || ""}
-        
           ></TextField>
-          <TextBox
-            id="alias"
-            name="alias"
-            value={datos.alias || ""}
-            onChange={IngresarValoresMemoria}
-            label="Prueba"
-            required={true}
-            requiredLabel={"Ingrese Informacion"}
-       
-          ></TextBox>
           <Button
             type="submit"
             fullWidth
@@ -97,7 +85,6 @@ const Login = () => {
             color="primary"
             style={style.submit}
             onClick={IniciarSesion}
-          
           >
             Enviar
           </Button>
