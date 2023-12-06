@@ -12,6 +12,7 @@ import RegistrarUsuario from "./componentes/seguridad/RegistrarUsuario";
 import Login from "./componentes/seguridad/Login";
 import PerfilUsuario from "./componentes/seguridad/PerfilUsuario";
 import TesteoComponentes from "./componentes/TesteoComponentes"
+import TestsGrid from "./componentes/TestsGrid"
 
 function App() {
   const [{ sesionUsuario, openSnackbar }, dispatch] = useStateValue();
@@ -58,6 +59,7 @@ function App() {
             <Routes>
               <Route exact path="/auth/login" element={<Login></Login>}></Route>
               <Route exact path="/Test" element={<TesteoComponentes></TesteoComponentes>}></Route>
+              <Route exact path="/Grid" element={<TestsGrid></TestsGrid>}></Route>
               {/* <Route
                 exact
                 path="/auth/registrar"

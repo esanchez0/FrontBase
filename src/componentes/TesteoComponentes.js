@@ -6,6 +6,10 @@ import DatePicker, {
   calendarContainer,
 } from "react-datepicker";
 import ListSelector from "./UI/ListSelector";
+import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from "material-react-table";
 
 const TesteoComponentes = () => {
   const [datos, setDatos] = useState({
@@ -46,9 +50,9 @@ const TesteoComponentes = () => {
       ></TextBox>
 
       <Calender
-        fullScreen={true}
+        fullScreen={false}
         onChange={onChangeFecha}
-        DateFormat="MM-dd-yyyy"
+       // DateFormat="dd-MM-yyyy"
       ></Calender>
 
       <DatePicker
