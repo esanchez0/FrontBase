@@ -1,15 +1,7 @@
 import React, { useEffect, useState } from "react";
 import style from "../Tool/style";
-import {
-  Container,
-  Typography,
-  TextField,
-  Button,
-  Grid,
-} from "@mui/material";
-import {  
-  ActualizarUsuario,
-} from "../../actions/UsuarioAction";
+import { Container, Typography, TextField, Button, Grid } from "@mui/material";
+import { ActualizarUsuario } from "../../actions/UsuarioAction";
 import { useStateValue } from "../../contexto/store";
 
 const PerfilUsuario = () => {
@@ -23,9 +15,7 @@ const PerfilUsuario = () => {
   });
 
   useEffect(() => {
-    //ObtenerUsuarioActual(dispatch).then((response) => {
-      setDatos(sesionUsuario.usuario);
-   // });
+    setDatos(sesionUsuario.usuario);
   }, []);
 
   const IngresarValoresMemoria = (e) => {

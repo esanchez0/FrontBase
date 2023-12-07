@@ -11,6 +11,9 @@ import { ObtenerUsuarioActual } from "./actions/UsuarioAction";
 import RegistrarUsuario from "./componentes/seguridad/RegistrarUsuario";
 import Login from "./componentes/seguridad/Login";
 import PerfilUsuario from "./componentes/seguridad/PerfilUsuario";
+import RolesPerfiles from "./componentes/catalogos/RolesPerfiles";
+
+//Pantallas de testeo borrar
 import TesteoComponentes from "./componentes/TesteoComponentes"
 import TestsGrid from "./componentes/TestsGrid"
 
@@ -88,7 +91,8 @@ function App() {
                <Route element={<ProtectedRoute isAllowed={!!sesionUsuario} />}>
                 <Route path="/" element={<PerfilUsuario />} />  
                 <Route path="/auth/perfil" element={<PerfilUsuario />} />   
-                <Route path="/auth/registrar" element={<RegistrarUsuario />} />    
+                <Route path="/auth/registrar" element={<RegistrarUsuario />} /> 
+                <Route path="/rol" element={<RolesPerfiles />} />    
               </Route>
             </Routes>
           </Grid>

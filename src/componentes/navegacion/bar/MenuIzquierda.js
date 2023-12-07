@@ -14,7 +14,14 @@ export const MenuIzquierda = ({ classes }) => {
           <i className="material-icons">account_box</i>
           <ListItemText
             classes={{ primary: classes.listItemText }}
-            primary="Registrar"
+            primary="Registrar Nuevo Usuario"
+          />
+        </ListItem>
+        <ListItem to="/rol" component={NavLink}>
+          <i className="material-icons">supervisor_account</i>
+          <ListItemText
+            classes={{ primary: classes.listItemText }}
+            primary="Nuevo Rol"
           />
         </ListItem>
       </List>
