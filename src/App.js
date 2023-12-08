@@ -16,6 +16,7 @@ import RolesPerfiles from "./componentes/catalogos/RolesPerfiles";
 //Pantallas de testeo borrar
 import TesteoComponentes from "./componentes/TesteoComponentes"
 import TestsGrid from "./componentes/TestsGrid"
+import CrudGRID from "./componentes/catalogos/CrudGRID";
 
 function App() {
   const [{ sesionUsuario, openSnackbar }, dispatch] = useStateValue();
@@ -63,6 +64,7 @@ function App() {
               <Route exact path="/auth/login" element={<Login></Login>}></Route>
               <Route exact path="/Test" element={<TesteoComponentes></TesteoComponentes>}></Route>
               <Route exact path="/Grid" element={<TestsGrid></TestsGrid>}></Route>
+              <Route exact path="/GR" element={<CrudGRID></CrudGRID>}></Route>
               {/* <Route
                 exact
                 path="/auth/registrar"

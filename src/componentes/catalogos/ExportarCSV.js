@@ -20,7 +20,8 @@ import { MaterialReactTable } from "material-react-table";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 //------------    PARA MOSTRAR DATOS    ---------------
 //-----------     Ejemplo exportyar archivo csv
-
+import FileDownloadIcon from "@mui/icons-material/FileDownload";
+import { ExportToCsv } from "export-to-csv";
 
 const RolesPerfiles = () => {
   const [{ usuarioSesion }, dispatch] = useStateValue();
@@ -94,17 +95,29 @@ const RolesPerfiles = () => {
     });
   };
 
+  const csvOptions = {
+    fieldSeparator: ",",
+    quoteStrings: '"',
+    decimalSeparator: ".",
+    showLabels: true,
+    useBom: true,
+    useKeysAsHeaders: false,
+    headers: columns.map((c) => c.header),
+  };
 
+  const csvExporter = new ExportToCsv(csvOptions);
 
+  const handleExportRows = (rows) => {
+    csvExporter.generateCsv(rows.map((row) => row.original));
+  };
+
+  const handleExportData = () => {
+    csvExporter.generateCsv(obtenerRoles);
+  };
 
   return (
     <Container container="main" maxWidth="xs" justifycontent="center">
       <div style={style.paper}>
-        {/* <Avatar style={style.avatar}>
-          <SupervisedUserCircleIcon
-            style={style.icon}
-          ></SupervisedUserCircleIcon>
-        </Avatar> */}
         <Typography component="h1" variant="h5">
           Roles - Perfil
         </Typography>
@@ -134,22 +147,68 @@ const RolesPerfiles = () => {
           </Grid>
         </form>
 
-        {/* <MaterialReactTable
-          //  enableColumnActions={false} //Opciones ocultar o mostrar columna una a una
-          // enableColumnFilters={false} //Busqueda filtros por columna
-          //enablePagination={false} //Paginacion
-          // enableSorting={false} //ordenar por columnas
-          // enableBottomToolbar={false} //mostrar opciones d epaginacion
-          // enableTopToolbar={false} //opciones de menu superior
-          // muiTableBodyRowProps={{ hover: false }} //resltar filas
+        <MaterialReactTable
 
           localization={MRT_Localization_ES}
           columns={columns}
           data={obtenerRoles}
-
-        
-         
-        /> */}
+          enableRowSelection
+          positionToolbarAlertBanner="bottom" //Aun no se
+          renderTopToolbarCustomActions={({ table }) => (
+            <Box
+              sx={{
+                display: "flex",
+                gap: "1rem",
+                p: "0.5rem",
+                flexWrap: "wrap",
+              }}
+            >
+              <Button
+                color="primary"
+                //export all data that is currently in the table (ignore pagination, sorting, filtering, etc.)
+                onClick={handleExportData}
+                startIcon={<FileDownloadIcon />}
+                variant="contained"
+              >
+                Exportar todos los datos
+              </Button>
+              <Button
+                disabled={table.getPrePaginationRowModel().rows.length === 0}
+                //export all rows, including from the next page, (still respects filtering and sorting)
+                onClick={() =>
+                  handleExportRows(table.getPrePaginationRowModel().rows)
+                }
+                startIcon={<FileDownloadIcon />}
+                variant="contained"
+              >
+                Exportar todas las filas
+              </Button>
+              <Button
+                disabled={table.getRowModel().rows.length === 0}
+                //export all rows as seen on the screen (respects pagination, sorting, filtering, etc.)
+                onClick={() => handleExportRows(table.getRowModel().rows)}
+                startIcon={<FileDownloadIcon />}
+                variant="contained"
+              >
+                Exportar pagina
+              </Button>
+              <Button
+                disabled={
+                  !table.getIsSomeRowsSelected() &&
+                  !table.getIsAllRowsSelected()
+                }
+                //only export selected rows
+                onClick={() =>
+                  handleExportRows(table.getSelectedRowModel().rows)
+                }
+                startIcon={<FileDownloadIcon />}
+                variant="contained"
+              >
+                Exportar filas seleccionadas
+              </Button>
+            </Box>
+          )}
+        />
       </div>
     </Container>
   );
