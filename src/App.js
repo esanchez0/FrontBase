@@ -1,5 +1,5 @@
 import React, { react, useState, useEffect, Fragment } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route} from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme/theme";
 import AppNavbar from "./componentes/navegacion/AppNavbar";
@@ -56,40 +56,18 @@ function App() {
         <ThemeProvider theme={theme}>
           <AppNavbar></AppNavbar>
           <Grid container>
-            <Routes>
-              <Route exact path="/auth/login" element={<Login></Login>}></Route>
-              <Route exact path="/Test" element={<TesteoComponentes></TesteoComponentes>}></Route>
-              <Route exact path="/Grid" element={<TestsGrid></TestsGrid>}></Route>
-              {/* <Route
-                exact
-                path="/auth/registrar"
-                element={<RegistrarUsuario></RegistrarUsuario>}
-              ></Route> */}
-              {/* <Route
-                exact
-                path="/auth/perfil"
-                element={<PerfilUsuario></PerfilUsuario>}
-              ></Route> */}
-              {/* <RutaSegura 
-                exact
-                path="/auth/perfil"
-                component={PerfilUsuario}
-              /> */}
-              {/* <Route
-                exact
-                path="/"
-                element={<PerfilUsuario></PerfilUsuario>}
-              ></Route> */}
-              {/* <RutaSegura 
-                exact
-                path="/"
-                element={PerfilUsuario}
-              /> */}
-               <Route element={<ProtectedRoute isAllowed={!!sesionUsuario} />}>
-                <Route path="/" element={<PerfilUsuario />} />  
-                <Route path="/auth/perfil" element={<PerfilUsuario />} />   
-                <Route path="/auth/registrar" element={<RegistrarUsuario />} />    
-              </Route>
+            <Routes basename="/auth/login">
+                <Route basename="/auth/login" path="/" element={<Login></Login>} >
+                  <Route exact path="/auth/login" element={<Login></Login>}></Route>
+                  <Route exact path="/Test" element={<TesteoComponentes></TesteoComponentes>}></Route>
+                  <Route exact path="/Grid" element={<TestsGrid></TestsGrid>}></Route>
+                </Route>
+                <Route basename="/auth/perfil" path="/" element={<ProtectedRoute isAllowed={!!sesionUsuario} />}>
+                  <Route path="/" element={<PerfilUsuario />} />  
+                  <Route path="/auth/perfil" element={<PerfilUsuario />} />   
+                  <Route path="/auth/registrar" element={<RegistrarUsuario />} />  
+                  <Route path="*" element={<PerfilUsuario />} />  
+                </Route>
             </Routes>
           </Grid>
         </ThemeProvider>
