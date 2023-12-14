@@ -13,6 +13,8 @@ import Login from "./componentes/seguridad/Login";
 import PerfilUsuario from "./componentes/seguridad/PerfilUsuario";
 import TesteoComponentes from "./componentes/TesteoComponentes"
 import TestsGrid from "./componentes/TestsGrid"
+import Consigna from "./componentes/Consignas/NuevoConsigna"
+import Incidencia from "./componentes/Incidencias/NuevaIncidencia"
 
 function App() {
   const [{ sesionUsuario, openSnackbar }, dispatch] = useStateValue();
@@ -59,13 +61,15 @@ function App() {
             <Routes basename="/auth/login">
                 <Route basename="/auth/login" path="/" element={<Login></Login>} >
                   <Route exact path="/auth/login" element={<Login></Login>}></Route>
-                  <Route exact path="/Test" element={<TesteoComponentes></TesteoComponentes>}></Route>
-                  <Route exact path="/Grid" element={<TestsGrid></TestsGrid>}></Route>
                 </Route>
                 <Route basename="/auth/perfil" path="/" element={<ProtectedRoute isAllowed={!!sesionUsuario} />}>
                   <Route path="/" element={<PerfilUsuario />} />  
                   <Route path="/auth/perfil" element={<PerfilUsuario />} />   
-                  <Route path="/auth/registrar" element={<RegistrarUsuario />} />  
+                  <Route path="/auth/registrar" element={<RegistrarUsuario />} />
+                  <Route path="/Consigna" element={<Consigna></Consigna>}></Route>
+                  <Route path="/Incidencia" element={<Incidencia></Incidencia>}></Route> 
+                  <Route exact path="/Test" element={<TesteoComponentes></TesteoComponentes>}></Route>
+                  <Route exact path="/Grid" element={<TestsGrid></TestsGrid>}></Route> 
                   <Route path="*" element={<PerfilUsuario />} />  
                 </Route>
             </Routes>
