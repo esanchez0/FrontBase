@@ -12,13 +12,18 @@ import {
   Stack,
   TextField,
   Tooltip,
+  Container,
+  Grid,
+  Typography,
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import {
   registrarCatalogo,
   ObtenerPerfiles,
+  EliminarRol,
 } from "../../actions/CatalogosAction";
 import { useStateValue } from "../../contexto/store";
+import style from "../Tool/style";
 
 const CrudGRID = () => {
   const [obtenerRoles, setobtenerRoles] = useState([]);
@@ -33,40 +38,98 @@ const CrudGRID = () => {
     setTableData(response.data);
   };
 
-  const [createModalOpen, setCreateModalOpen] = useState(false);
+  const [createModalOpen, setCreateModalOpen] = useState(false); //handler abrir y cerra modal
   const [tableData, setTableData] = useState([]);
   const [validationErrors, setValidationErrors] = useState({});
 
-  const handleCreateNewRow = (values) => {
-    tableData.push(values);
-    setTableData([...tableData]);
+  const [{ usuarioSesion }, dispatch] = useStateValue();
+  //Guardar nuevo registro
+  const handleCreateNewRow = (datos) => {
+    console.log(datos);
+    // tableData.push(datos);
+    // setTableData([...tableData]);
+    registrarCatalogo(datos).then((response) => {
+      if (response.status === 200) {
+        dispatch({
+          type: "OPEN_SNACKBAR",
+          openMensaje: {
+            open: true,
+            mensaje: "Perfil guardado exitosamente",
+          },
+        });
+        ObtenerRoles();
+      } else {
+        dispatch({
+          type: "OPEN_SNACKBAR",
+          openMensaje: {
+            open: true,
+            mensaje: "Error al intentar guardar el perfil nuevo",
+          },
+        });
+      }
+    });
   };
 
+  //Editar guardar ya registro registro
   const handleSaveRowEdits = async ({ exitEditingMode, row, values }) => {
+    //row.original.id para obtener el id que se va editar
+    //values los nuevos valores que se ingresaron
+
     if (!Object.keys(validationErrors).length) {
+      //Actualizamos los valores y regresamos la data nueva
       tableData[row.index] = values;
-      //send/receive api updates here, then refetch or update local table data for re-render
       setTableData([...tableData]);
-      exitEditingMode(); //required to exit editing mode and close modal
+      exitEditingMode(); //siempre se pone es requerido para salir de la modal
     }
   };
 
+  //Cerrar popup editar
   const handleCancelRowEdits = () => {
     setValidationErrors({});
   };
 
+  //Eliminar registro, ir a la api eliminar y vovler a llenar datos
   const handleDeleteRow = useCallback(
     (row) => {
-      if (
-        !window.confirm(
-          `Are you sure you want to delete ${row.getValue("firstName")}`
-        )
-      ) {
-        return;
-      }
-      //send api delete request here, then refetch or update local table data for re-render
-      tableData.splice(row.index, 1);
-      setTableData([...tableData]);
+      //console.log(JSON.stringify(row.original));
+
+      // if (
+      //   !window.confirm(
+      //     "Seguro que desea eliminar" // ${row.getValue("id")}
+      //   )
+      // ) {
+      //   return;
+      // }
+
+      // tableData.splice(row.index, 1);
+      // setTableData([...tableData]);
+
+      const objDatos = {
+        nombre: row.getValue("name"),
+      };
+
+      console.log(objDatos);
+
+      EliminarRol(objDatos).then((response) => {
+        if (response.status === 200) {
+          dispatch({
+            type: "OPEN_SNACKBAR",
+            openMensaje: {
+              open: true,
+              mensaje: "Perfil eliminado exitosamente",
+            },
+          });
+          ObtenerRoles();
+        } else {
+          dispatch({
+            type: "OPEN_SNACKBAR",
+            openMensaje: {
+              open: true,
+              mensaje: "Error al intentar elininar el perfil",
+            },
+          });
+        }
+      });
     },
     [tableData]
   );
@@ -102,6 +165,7 @@ const CrudGRID = () => {
     [validationErrors]
   );
 
+  //Configuramos las columnas que se mostraran en la tabla
   const columns = useMemo(
     () => [
       {
@@ -114,7 +178,7 @@ const CrudGRID = () => {
       },
       {
         accessorKey: "name",
-        header: "First Name",
+        header: "Nombre",
         size: 140,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
@@ -122,7 +186,7 @@ const CrudGRID = () => {
       },
       {
         accessorKey: "normalizedName",
-        header: "Last Name",
+        header: "Nombre mayusculas",
         size: 140,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
@@ -163,48 +227,55 @@ const CrudGRID = () => {
 
   return (
     <>
-      <MaterialReactTable
-        displayColumnDefOptions={{
-          "mrt-row-actions": {
-            muiTableHeadCellProps: {
-              align: "center",
-            },
-            size: 120,
-          },
-        }}
-        columns={columns}
-        data={tableData}
-        editingMode="modal" //default
-        enableColumnOrdering
-        enableEditing
-        onEditingRowSave={handleSaveRowEdits}
-        onEditingRowCancel={handleCancelRowEdits}
-        renderRowActions={({ row, table }) => (
-          //Menu para editar o eliminar registros
-          <Box sx={{ display: "flex", gap: "1rem" }}>
-            <Tooltip arrow placement="left" title="Editar">
-              <IconButton onClick={() => table.setEditingRow(row)}>
-                <Edit />
-              </IconButton>
-            </Tooltip>
-            <Tooltip arrow placement="right" title="Eliminar">
-              <IconButton color="error" onClick={() => handleDeleteRow(row)}>
-                <Delete />
-              </IconButton>
-            </Tooltip>
-          </Box>
-        )}
-        renderTopToolbarCustomActions={() => (
-          //Boton para crear nuevo, muestra la modal
-          <Button
-            color="secondary"
-            onClick={() => setCreateModalOpen(true)}
-            variant="contained"
-          >
-            Crear nuevo perfil
-          </Button>
-        )}
-      />
+      <Container container="main" maxWidth="xs" justifycontent="center">
+        <div style={style.paper}>
+          <MaterialReactTable
+            displayColumnDefOptions={{
+              "mrt-row-actions": {
+                muiTableHeadCellProps: {
+                  align: "center",
+                },
+                size: 120,
+              },
+            }}
+            columns={columns}
+            data={tableData}
+            editingMode="modal" //default
+            enableColumnOrdering
+            enableEditing
+            onEditingRowSave={handleSaveRowEdits}
+            onEditingRowCancel={handleCancelRowEdits}
+            renderRowActions={({ row, table }) => (
+              //Menu para editar o eliminar registros
+              <Box sx={{ display: "flex", gap: "1rem" }}>
+                <Tooltip arrow placement="left" title="Editar">
+                  <IconButton onClick={() => table.setEditingRow(row)}>
+                    <Edit />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip arrow placement="right" title="Eliminar">
+                  <IconButton
+                    color="error"
+                    onClick={() => handleDeleteRow(row)}
+                  >
+                    <Delete />
+                  </IconButton>
+                </Tooltip>
+              </Box>
+            )}
+            renderTopToolbarCustomActions={() => (
+              //Boton para crear nuevo, muestra la modal
+              <Button
+                color="secondary"
+                onClick={() => setCreateModalOpen(true)}
+                variant="contained"
+              >
+                Crear nuevo perfil
+              </Button>
+            )}
+          />
+        </div>
+      </Container>
       <CreateNewAccountModal
         columns={columns}
         open={createModalOpen}
@@ -217,6 +288,19 @@ const CrudGRID = () => {
 
 //Modal mui para crear nuevos registros
 export const CreateNewAccountModal = ({ open, columns, onClose, onSubmit }) => {
+  const [datos, setDatos] = useState({
+    nombre: "",
+  });
+
+  const IngresarValoresMemoria = (e) => {
+    const { name, value } = e.target;
+    setDatos((anterior) => ({
+      ...anterior,
+      [name]: value,
+    }));
+  };
+
+  //Se obtienen los valores de las cajas de texto
   const [values, setValues] = useState(() =>
     columns.reduce((acc, column) => {
       acc[column.accessorKey ?? ""] = "";
@@ -224,9 +308,11 @@ export const CreateNewAccountModal = ({ open, columns, onClose, onSubmit }) => {
     }, {})
   );
 
-  const handleSubmit = () => {
-    //put your validation logic here
-    onSubmit(values);
+  //Obtener valores, logica para validaciones
+  const GuardarNuevo = () => {
+    //  alert("valido nuevo");
+    onSubmit(datos);
+    setDatos({ nombre: "" });
     onClose();
   };
 
@@ -244,7 +330,7 @@ export const CreateNewAccountModal = ({ open, columns, onClose, onSubmit }) => {
             }}
           >
             {/* Ciclo for, recorre las columnas y crea dinamicamente los textbox */}
-            {columns.map((column) => (
+            {/* {columns.map((column) => (
               <TextField
                 key={column.accessorKey}
                 label={column.header}
@@ -253,13 +339,32 @@ export const CreateNewAccountModal = ({ open, columns, onClose, onSubmit }) => {
                   setValues({ ...values, [e.target.name]: e.target.value })
                 }
               />
-            ))}
+            ))} */}
+            <Container container="main" maxWidth="xs" justifycontent="center">
+              <div style={style.paper}>
+                <form style={style.form}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} md={12}>
+                      <TextField
+                        variant="outlined"
+                        label="Ingrese Perfil"
+                        name="nombre"
+                        fullWidth
+                        margin="normal"
+                        onChange={IngresarValoresMemoria}
+                        value={datos.nombre || ""}
+                      ></TextField>
+                    </Grid>
+                  </Grid>
+                </form>
+              </div>
+            </Container>
           </Stack>
         </form>
       </DialogContent>
       <DialogActions sx={{ p: "1.25rem" }}>
         <Button onClick={onClose}>Cancelar</Button>
-        <Button color="secondary" onClick={handleSubmit} variant="contained">
+        <Button color="secondary" onClick={GuardarNuevo} variant="contained">
           Guardar
         </Button>
       </DialogActions>

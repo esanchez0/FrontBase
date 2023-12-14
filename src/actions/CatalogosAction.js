@@ -28,4 +28,18 @@ export const ObtenerPerfiles = () => {
   });
 };
 
+export const EliminarRol = (datos) => {
+  return new Promise((resolve, eject) => {
+    httpCliente
+      .delete("/rol/eliminar",datos)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((error) => {
+        console.log(error.response);
+        resolve(error.response);
+      });
+  });
+};
+
 //--------------------------------------
