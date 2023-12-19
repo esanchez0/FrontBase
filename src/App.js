@@ -96,7 +96,9 @@ function App() {
                 <Route path="/" element={<PerfilUsuario />} />  
                 <Route path="/auth/perfil" element={<PerfilUsuario />} />   
                 <Route path="/auth/registrar" element={<RegistrarUsuario />} /> 
-                <Route path="/rol" element={<RolesPerfiles />} />    
+                <Route path="/rol" element={<RolesPerfiles />} />  
+                <Route path="/Consigna" element={<Consigna></Consigna>}></Route>
+                  <Route path="/Incidencia" element={<Incidencia></Incidencia>}></Route>   
                 
               </Route>
             </Routes>
