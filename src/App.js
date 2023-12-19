@@ -1,5 +1,5 @@
 import React, { react, useState, useEffect, Fragment } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route} from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme/theme";
 import AppNavbar from "./componentes/navegacion/AppNavbar";
@@ -16,6 +16,8 @@ import RolesPerfiles from "./componentes/catalogos/RolesPerfiles";
 //Pantallas de testeo borrar
 import TesteoComponentes from "./componentes/TesteoComponentes"
 import TestsGrid from "./componentes/TestsGrid"
+import Consigna from "./componentes/Consignas/NuevoConsigna"
+import Incidencia from "./componentes/Incidencias/NuevaIncidencia"
 import CrudGRID from "./componentes/catalogos/CrudGRID";
 
 function App() {
@@ -95,6 +97,7 @@ function App() {
                 <Route path="/auth/perfil" element={<PerfilUsuario />} />   
                 <Route path="/auth/registrar" element={<RegistrarUsuario />} /> 
                 <Route path="/rol" element={<RolesPerfiles />} />    
+                
               </Route>
             </Routes>
           </Grid>

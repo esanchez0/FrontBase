@@ -35,7 +35,24 @@ export const MenuIzquierda = ({ classes }) => {
           />
         </ListItem>
       </List>
-
+      <List>
+        <ListItem to="/Consigna" component={NavLink}>
+          <i className="material-icons">account_box</i>
+          <ListItemText
+            classes={{ primary: classes.listItemText }}
+            primary="Consigna"
+          />
+        </ListItem>
+      </List>
+      <List>
+        <ListItem to="/Incidencia" component={NavLink}>
+          <i className="material-icons">account_box</i>
+          <ListItemText
+            classes={{ primary: classes.listItemText }}
+            primary="Incidencia"
+          />
+        </ListItem>
+      </List>
       <Divider />
     </div>
   );

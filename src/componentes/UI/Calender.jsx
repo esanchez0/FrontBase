@@ -6,6 +6,7 @@ import DatePicker, {
 import "react-datepicker/dist/react-datepicker.css";
 import "react-datepicker/dist/react-datepicker-cssmodules.css";
 import es from "date-fns/locale/es";
+import { Label } from "@mui/icons-material";
 
 export default function Calender(props) {
   const [valueDefault, setvalueDefault] = useState(props.value || new Date());
