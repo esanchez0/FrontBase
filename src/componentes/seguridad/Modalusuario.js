@@ -32,10 +32,11 @@ const Modalusuario = ({
       />
     );
   } else {
-    componenet = (
-      <ResetearPassword AtributoData={Information} AtributoCerrarModal={cerrarModal}
-      AtributoActualizarUsuarios={Actualizar} />
-    );
+    console.log("otra");
+    // componenet = (
+    //   <ResetearPassword AtributoData={Information} AtributoCerrarModal={cerrarModal}
+    //   AtributoActualizarUsuarios={Actualizar} />
+    // );
   }
 
   return (

@@ -63,7 +63,6 @@ const RegistrarUsuario = () => {
 
   //------------  Solicitudes BD  -------------
   const Consultarusuarios = async () => {
-    console.log("aqui");
     const response = await ObtenerUsuarios();
     setObtenerUsuarios(response.data);
     setIniciaApp(false);
@@ -260,7 +259,7 @@ const RegistrarUsuario = () => {
           <Typography>Detalles</Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <form style={style.form}>
+          {/* <form style={style.form}>
             <Grid container spacing={2}>
               <Grid item xs={12} md={12}>
                 <TextField
@@ -273,7 +272,7 @@ const RegistrarUsuario = () => {
                 ></TextField>
               </Grid>
             </Grid>
-          </form>
+          </form> */}
           <div className="flex flex-col  w-full mt-10 ">
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -317,7 +316,7 @@ const RegistrarUsuario = () => {
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
                       {rows.map((row) => (
-                        <tr key={row.id}>
+                        <tr key={row.idUsuario}>
                           <td className="px-6 py-4 whitespace-nowrap">
                             <div className="text-sm text-gray-900">
                               {row.nombreCompleto}
