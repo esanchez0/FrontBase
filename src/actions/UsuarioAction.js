@@ -53,10 +53,6 @@ export const ObtenerUsuarioActual = (dispatch) => {
         });
         resolve(response);
       })
-      // .catch((error) => {
-      //   console.log("error actualizar aqui", error);
-      //   resolve(error);
-      // })
       .catch((error) => {
         resolve(error.response);
       });
@@ -68,12 +64,6 @@ export const ActualizarUsuario = (usuario, dispatch) => {
     httpCliente
       .put("/Usuario", usuario)
       .then((response) => {
-        // if(response.data && response.data.imagenPerfil){
-        //   let fotoPerfil = response.data.imagenPerfil;
-        //   const nuevoFile = 'data:image/' + fotoPerfil.extension + ';base64,' + fotoPerfil.data;
-        //   response.data.imagenPerfil = nuevoFile;
-        // }
-
         dispatch({
           type: "INICIAR_SESION",
           sesion: response.data,
@@ -103,5 +93,21 @@ export const loginUsuario = (usuario, dispatch) => {
       .catch((error) => {
         resolve(error.response);
       });
+  });
+};
+
+export const ObtenerUsuarios = () => {
+  return new Promise((resolve, eject) => {
+    httpCliente.get("/Usuario/ObtenerUsuarios").then((response) => {
+      resolve(response);
+    });
+  });
+};
+
+export const obtenerRoles = () => {
+  return new Promise((resolve, eject) => {
+    httpCliente.get("/Rol/lista").then((Response) => {
+      resolve(Response);
+    });
   });
 };

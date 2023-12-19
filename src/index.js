@@ -6,7 +6,7 @@ import App from "./App";
 import { initialState } from "./contexto/initialState"; // variable contenedora de todas las variables
 import { StateProvider } from "./contexto/store"; //almacena variables globales, suscribe a todos los componentes
 import { mainReducer } from "./contexto/reducers"; //indice de los reducers, todas las variables globales, quien tiene acceso a todas esas variables
-
+import './index.css';
 
 
 ReactDOM.render(
