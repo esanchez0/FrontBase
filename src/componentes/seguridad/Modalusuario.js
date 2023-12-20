@@ -1,13 +1,13 @@
 import { React } from "react";
 import { Modal, Box } from "@mui/material";
 import EditarUsuario from "./EditarUsuario";
+import GuardarUsuario from "./GuardarUsuario";
 import ResetearPassword from "./ResetearPassword";
 
 const Modalusuario = ({
   open,
   setopen,
   Information,
-  municipio,
   Actualizar,
   Accion,
 }) => {
@@ -23,15 +23,24 @@ const Modalusuario = ({
   if (Accion === "Edicion") {
     componenet = (
       <EditarUsuario
-        AtributoEsEdicion={false}
         AtributoData={Information}
-        AtributoMun={municipio}
         AtributoCerrarModal={cerrarModal}
         AtributoActualizarUsuarios={Actualizar}
         AtributoAccion={Accion}
       />
     );
-  } else {
+  }
+  else if (Accion === "Registrar") {  
+    componenet = (
+      <GuardarUsuario
+        AtributoData={Information}
+        AtributoCerrarModal={cerrarModal}
+        AtributoActualizarUsuarios={Actualizar}
+        AtributoAccion={Accion}
+      />
+    );
+  }
+  else {
     console.log("otra");
     // componenet = (
     //   <ResetearPassword AtributoData={Information} AtributoCerrarModal={cerrarModal}

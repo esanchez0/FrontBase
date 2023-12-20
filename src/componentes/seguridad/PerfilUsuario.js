@@ -69,6 +69,7 @@ const PerfilUsuario = () => {
                 label="Ingrese nombre y apellido"
                 onChange={IngresarValoresMemoria}
                 value={datos.nombreCompleto || ""}
+                disabled
               ></TextField>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -79,6 +80,7 @@ const PerfilUsuario = () => {
                 label="Ingrese email"
                 onChange={IngresarValoresMemoria}
                 value={datos.email || ""}
+                disabled
               ></TextField>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -89,9 +91,10 @@ const PerfilUsuario = () => {
                 label="Ingrese username"
                 onChange={IngresarValoresMemoria}
                 value={datos.username || ""}
+                disabled
               ></TextField>
             </Grid>
-            <Grid item xs={12} md={6}>
+            {/* <Grid item xs={12} md={6}>
               <TextField
                 name="password"
                 variant="outlined"
@@ -100,8 +103,8 @@ const PerfilUsuario = () => {
                 onChange={IngresarValoresMemoria}
                 value={datos.password || ""}
               ></TextField>
-            </Grid>
-            <Grid item xs={12} md={6}>
+            </Grid> */}
+            {/* <Grid item xs={12} md={6}>
               <TextField
                 name="confirmePassword"
                 variant="outlined"
@@ -110,9 +113,9 @@ const PerfilUsuario = () => {
                 onChange={IngresarValoresMemoria}
                 value={datos.confirmePassword || ""}
               ></TextField>
-            </Grid>
+            </Grid> */}
           </Grid>
-          <Grid container justifyContent="center">
+          {/* <Grid container justifyContent="center">
             <Grid item xs={12} md={6}>
               <Button
                 type="submit"
@@ -126,7 +129,7 @@ const PerfilUsuario = () => {
                 Guardar Datos
               </Button>
             </Grid>
-          </Grid>
+          </Grid> */}
         </form>
       </div>
     </Container>

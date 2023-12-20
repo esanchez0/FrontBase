@@ -89,7 +89,7 @@ export default function ListSelector(props) {
               option[textField] ? option[textField] : ""
             }
             value={ctrlItem}
-            getOptionSelected={(option, value) => {
+            getoptionselected={(option, value) => {
               if (value === "") {
                 return true;
               } else if (value === option) {
