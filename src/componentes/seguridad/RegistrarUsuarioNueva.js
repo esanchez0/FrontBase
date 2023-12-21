@@ -231,7 +231,7 @@ const RegistrarUsuarioNueva = () => {
     );
 
     return (
-        <Container container="main" maxWidth="lg" justifycontent="center" style={{paddingTop:10}}>
+        <Container container="main" maxWidth="lg" justifycontent="center" style={{ paddingTop: 10 }}>
             <>
                 <MaterialReactTable
                     localization={MRT_Localization_ES}
@@ -247,7 +247,7 @@ const RegistrarUsuarioNueva = () => {
                     columns={columns}
                     data={tableData}
                     initialState={{ columnVisibility: { idUsuario: false } }}
-                    editingMode="modal" //default
+                    //editingMode="modal" //default
                     enableColumnOrdering
                     enableEditing
                     // onEditingRowSave={handleSaveRowEdits}
