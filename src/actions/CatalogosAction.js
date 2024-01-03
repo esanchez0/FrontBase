@@ -1,5 +1,5 @@
 import httpCliente from "../servicios/HttpCliente";
-import axios from "axios";
+
 
 //Acciones para roles
 export const registrarCatalogo = (catalogo) => {
@@ -43,3 +43,10 @@ export const EliminarRol = (datos) => {
 };
 
 //--------------------------------------
+export const catalogosComunes = (catalogo) => {
+  return new Promise((resolve, eject) => {
+    httpCliente.get("/CatalogoComun/" + catalogo).then((response) => {
+      resolve(response);
+    });
+  });
+};

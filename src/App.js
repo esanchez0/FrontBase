@@ -20,6 +20,7 @@ import Consigna from "./componentes/Consignas/NuevoConsigna"
 import Incidencia from "./componentes/Incidencias/NuevaIncidencia"
 import CrudGRID from "./componentes/catalogos/CrudGRID";
 import RegistrarUsuarioNueva from "./componentes/seguridad/RegistrarUsuarioNueva";
+import RegistrarCumple from "./componentes/CumpleAnios/RegistrarCumple";
 
 function App() {
   const [{ sesionUsuario, openSnackbar }, dispatch] = useStateValue();
@@ -69,6 +70,7 @@ function App() {
               <Route exact path="/Grid" element={<TestsGrid></TestsGrid>}></Route>
               <Route exact path="/GR" element={<CrudGRID></CrudGRID>}></Route>
               <Route exact path="/Reg" element={<RegistrarUsuarioNueva></RegistrarUsuarioNueva>}></Route>
+              <Route exact path="/cumple" element={<RegistrarCumple></RegistrarCumple>}></Route>
               {/* <Route
                 exact
                 path="/auth/registrar"
