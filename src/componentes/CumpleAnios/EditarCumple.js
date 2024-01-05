@@ -28,6 +28,8 @@ const EditarCumple = (props) => {
         nombre: "",
         idCompania: "DA181BAA-CEAE-4A36-53ED-08DC031ADF91",
         fechaCumpleAnios: "",
+        email: "",
+        celular: ""
     });
 
     const IngresarValoresMemoria = (e) => {
@@ -156,6 +158,26 @@ const EditarCumple = (props) => {
                                     disableFuture={true}
                                     renderInput={(params) => <TextField {...params} helperText={null} />}
                                 />
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    name="email"
+                                    variant="outlined"
+                                    fullWidth
+                                    label="Ingrese su Email"
+                                    onChange={IngresarValoresMemoria}
+                                    value={datos.email || ""}
+                                ></TextField>
+                            </Grid>
+                            <Grid item xs={12} md={6}>
+                                <TextField
+                                    name="celular"
+                                    variant="outlined"
+                                    fullWidth
+                                    label="Ingrese su celular"
+                                    onChange={IngresarValoresMemoria}
+                                    value={datos.celular || ""}
+                                ></TextField>
                             </Grid>
 
                         </Grid>

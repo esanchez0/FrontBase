@@ -31,8 +31,10 @@ import { MRT_Localization_ES } from "material-react-table/locales/es";
 import style from "../Tool/style";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { useStateValue } from "../../contexto/store";
 
 const Cumples = () => {
+  const [{ sesionUsuario }, dispatch] = useStateValue();
   const [createModalOpen, setCreateModalOpen] = useState(false);
   const [iniciaApp, setIniciaApp] = useState(true);
   const [obtenerDataGrid, setobtenerDataGrid] = useState([]);
@@ -44,6 +46,7 @@ const Cumples = () => {
   const [openDialog, setopenDialog] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  const [IdCumple, setIdCumple] = useState("");
 
   const handleClickOpen = () => {
     setopenDialog(true);
@@ -84,6 +87,8 @@ const Cumples = () => {
   const handleDeleteRow = useCallback(
     (row) => {
       setopenDialog(true);
+      setIdCumple(row.getValue("id"));
+
       // if (
       //   !window.confirm(
       //     `Desea eliminar este cumple años ${row.getValue("id")}`
@@ -97,6 +102,35 @@ const Cumples = () => {
     },
     [obtenerDataGrid]
   );
+
+  const EliminarRegistro = () => {
+    // alert(IdCumple);
+    Eliminar(IdCumple).then((response) => {
+     
+      if (response.status === 200) {
+
+        dispatch({
+          type: "OPEN_SNACKBAR",
+          openMensaje: {
+            open: true,
+            mensaje: "Se elimino exitosamente el Cumple años.",
+          },
+        });
+        ConsultarCumples();
+      } else {
+        dispatch({
+          type: "OPEN_SNACKBAR",
+          openMensaje: {
+            open: true,
+            mensaje:
+              "Errores al intentar eliminar en : " +
+              Object.keys(response.data.errors),
+          },
+        });
+      }
+    });
+    setopenDialog(false);
+  };
 
   const getCommonEditTextFieldProps = useCallback((cell) => { }, []);
   //
@@ -139,6 +173,22 @@ const Cumples = () => {
       {
         accessorKey: "fechaCumpleAnios",
         header: "Fechade Cumple años",
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+          type: "email",
+        }),
+      },
+      {
+        accessorKey: "email",
+        header: "Email",
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+          type: "email",
+        }),
+      },
+      {
+        accessorKey: "celular",
+        header: "Celular",
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
           type: "email",
@@ -241,7 +291,7 @@ const Cumples = () => {
           <Button autoFocus onClick={handleClose}>
             Cancelar
           </Button>
-          <Button onClick={handleClose} autoFocus>
+          <Button onClick={EliminarRegistro} autoFocus>
             Aceptar
           </Button>
         </DialogActions>

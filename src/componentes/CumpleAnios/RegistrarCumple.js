@@ -50,6 +50,8 @@ const RegistrarCumple = (props) => {
       nombre: "",
       idCompania: "",
       fechaCumpleAnios: "",
+      email: "",
+      celular: ""
     });
   };
 
@@ -165,6 +167,26 @@ const RegistrarCumple = (props) => {
                   disableFuture={true}
                   renderInput={(params) => <TextField {...params} helperText={null} />}
                 />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  name="email"
+                  variant="outlined"
+                  fullWidth
+                  label="Ingrese su Email"
+                  onChange={IngresarValoresMemoria}
+                  value={datos.email || ""}
+                ></TextField>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TextField
+                  name="celular"
+                  variant="outlined"
+                  fullWidth
+                  label="Ingrese su celular"
+                  onChange={IngresarValoresMemoria}
+                  value={datos.celular || ""}
+                ></TextField>
               </Grid>
 
             </Grid>
