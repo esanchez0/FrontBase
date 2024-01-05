@@ -1,5 +1,5 @@
 import React, { react, useState, useEffect, Fragment } from "react";
-import { BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import theme from "./theme/theme";
 import AppNavbar from "./componentes/navegacion/AppNavbar";
@@ -21,6 +21,7 @@ import Incidencia from "./componentes/Incidencias/NuevaIncidencia"
 import CrudGRID from "./componentes/catalogos/CrudGRID";
 import RegistrarUsuarioNueva from "./componentes/seguridad/RegistrarUsuarioNueva";
 import RegistrarCumple from "./componentes/CumpleAnios/RegistrarCumple";
+import Cumples from "./componentes/CumpleAnios/Cumples";
 
 function App() {
   const [{ sesionUsuario, openSnackbar }, dispatch] = useStateValue();
@@ -66,44 +67,21 @@ function App() {
           <Grid container>
             <Routes>
               <Route exact path="/auth/login" element={<Login></Login>}></Route>
-              <Route exact path="/Test" element={<TesteoComponentes></TesteoComponentes>}></Route>
-              <Route exact path="/Grid" element={<TestsGrid></TestsGrid>}></Route>
-              <Route exact path="/GR" element={<CrudGRID></CrudGRID>}></Route>
-              <Route exact path="/Reg" element={<RegistrarUsuarioNueva></RegistrarUsuarioNueva>}></Route>
-              <Route exact path="/cumple" element={<RegistrarCumple></RegistrarCumple>}></Route>
-              {/* <Route
-                exact
-                path="/auth/registrar"
-                element={<RegistrarUsuario></RegistrarUsuario>}
-              ></Route> */}
-              {/* <Route
-                exact
-                path="/auth/perfil"
-                element={<PerfilUsuario></PerfilUsuario>}
-              ></Route> */}
-              {/* <RutaSegura 
-                exact
-                path="/auth/perfil"
-                component={PerfilUsuario}
-              /> */}
-              {/* <Route
-                exact
-                path="/"
-                element={<PerfilUsuario></PerfilUsuario>}
-              ></Route> */}
-              {/* <RutaSegura 
-                exact
-                path="/"
-                element={PerfilUsuario}
-              /> */}
-               <Route element={<ProtectedRoute isAllowed={!!sesionUsuario} />}>
-                <Route path="/" element={<PerfilUsuario />} />  
-                <Route path="/auth/perfil" element={<PerfilUsuario />} />   
-                <Route path="/auth/registrar" element={<RegistrarUsuario />} /> 
-                <Route path="/rol" element={<RolesPerfiles />} />  
+              {/* <Route exact path="/Test" element={<TesteoComponentes></TesteoComponentes>}></Route> */}
+              {/* <Route exact path="/Grid" element={<TestsGrid></TestsGrid>}></Route> */}
+              {/* <Route exact path="/GR" element={<CrudGRID></CrudGRID>}></Route> */}
+              {/* <Route exact path="/Reg" element={<RegistrarUsuarioNueva></RegistrarUsuarioNueva>}></Route> */}
+              <Route exact path="/cumpleReg" element={<RegistrarCumple></RegistrarCumple>}></Route>
+              <Route exact path="/cumple" element={<Cumples></Cumples>}></Route>
+
+              <Route element={<ProtectedRoute isAllowed={!!sesionUsuario} />}>
+                <Route path="/" element={<PerfilUsuario />} />
+                <Route path="/auth/perfil" element={<PerfilUsuario />} />
+                <Route path="/auth/registrar" element={<RegistrarUsuarioNueva />} />
+                <Route path="/rol" element={<RolesPerfiles />} />
                 <Route path="/Consigna" element={<Consigna></Consigna>}></Route>
-                  <Route path="/Incidencia" element={<Incidencia></Incidencia>}></Route>   
-                
+                <Route path="/Incidencia" element={<Incidencia></Incidencia>}></Route>
+
               </Route>
             </Routes>
           </Grid>

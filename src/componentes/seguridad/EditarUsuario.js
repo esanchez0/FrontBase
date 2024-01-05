@@ -102,6 +102,7 @@ const EditarUsuario = (props) => {
             mensaje: "Se guardaron exitosamente los cambios en Perfil Usuario",
           },
         });
+        LimpiarCajas();
         props.AtributoCerrarModal();
         props.AtributoActualizarUsuarios();
       } else {

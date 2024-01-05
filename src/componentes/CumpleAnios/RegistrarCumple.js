@@ -15,7 +15,13 @@ import style from "../Tool/style";
 import { Registrar, Obtener } from "../../actions/CumplesAction";
 import { catalogosComunes } from "../../actions/CatalogosAction";
 import { useStateValue } from "../../contexto/store";
-// import Modalusuario from "./Modalusuario";
+import Calender from "../UI/Calender";
+import { DatePicker, LocalizationProvider, esES } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import dayjs from 'dayjs';
+// import es from 'date-fns/locale/es';
+// import { es } from 'date-fns/locale'
+import es from 'dayjs/locale/es';
 
 const RegistrarCumple = (props) => {
   const [{ sesionUsuario }, dispatch] = useStateValue();
@@ -24,10 +30,10 @@ const RegistrarCumple = (props) => {
   const [Compania, setCompania] = useState([]); //Combos roles perfil
 
   const [datos, setDatos] = useState({
-    id: "",
+    id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     nombre: "",
     idCompania: "",
-    fechaCumpleAnios: "",
+    fechaCumpleAnios: new Date("YYYY-MM-DD"),
   });
 
   const IngresarValoresMemoria = (e) => {
@@ -49,7 +55,7 @@ const RegistrarCumple = (props) => {
 
   //Eventos de estado
   useEffect(() => {
-   // ConsultarCumples();
+    // ConsultarCumples();
     ConsultarCompania();
     setIniciaApp(false);
   }, [iniciaApp]);
@@ -61,11 +67,10 @@ const RegistrarCumple = (props) => {
   };
 
   const ConsultarCompania = async () => {
-    
+
     const response = await catalogosComunes("Compañia");
-   
     setCompania(response.data);
-    console.log("resgrteso: ",response);
+
   };
 
   const changeCompania = (e) => {
@@ -75,25 +80,32 @@ const RegistrarCumple = (props) => {
     }));
   };
 
+  const changeCumpleAnios = (e) => {
+    setDatos((anterior) => ({
+      ...anterior,
+      fechaCumpleAnios: dayjs(e.$d).format('YYYY-MM-DD'),
+    }));
+  };
+
   const RegistrarUsuario = (e) => {
     e.preventDefault();
+
     console.log(datos);
 
     Registrar(datos).then((response) => {
       if (response.status === 200) {
-        console.log("Se registro el cumples años", response);
 
-        // dispatch({
-        //     type: "OPEN_SNACKBAR",
-        //     openMensaje: {
-        //         open: true,
-        //         mensaje: "Se actualizaron exitosamente los cambios.",
-        //     },
-        // });
+        dispatch({
+          type: "OPEN_SNACKBAR",
+          openMensaje: {
+            open: true,
+            mensaje: "Se registro exitosamente el Cumple años.",
+          },
+        });
         ConsultarCumples();
         LimpiarCajas();
         props.AtributoCerrarModal();
-        // props.AtributoActualizarUsuarios();
+        props.AtributoActualizarUsuarios();
       } else {
         dispatch({
           type: "OPEN_SNACKBAR",
@@ -108,68 +120,73 @@ const RegistrarCumple = (props) => {
     });
   };
 
+  const [value, setValue] = useState(dayjs(new Date()));
+
   return (
-    <Container container="main" maxWidth="md" justifycontent="center">
-      <div style={style.paper}>
-        <Typography component="h1" variant="h5" justifyContent="center">
-          Registro de CumpleAños
-        </Typography>
-        <form style={style.form}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={12}>
-              <TextField
-                name="Nombre"
-                variant="outlined"
-                fullWidth
-                label="Ingrese su nombre y apellidos"
-                onChange={IngresarValoresMemoria}
-                value={datos.nombreCompleto || ""}
-              ></TextField>
+    <LocalizationProvider adapterLocale={es} dateAdapter={AdapterDayjs}>
+      <Container container="main" maxWidth="md" justifycontent="center">
+        <div style={style.paper}>
+          <Typography component="h1" variant="h5" justifyContent="center">
+            Registro de CumpleAños
+          </Typography>
+          <form style={style.form}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={12}>
+                <TextField
+                  name="nombre"
+                  variant="outlined"
+                  fullWidth
+                  label="Ingrese su nombre y apellidos"
+                  onChange={IngresarValoresMemoria}
+                  value={datos.nombre || ""}
+                ></TextField>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Autocomplete
+                  onChange={(event, newValue) => {
+                    changeCompania(newValue);
+                  }}
+                  id="catalogo"
+                  name="catalogo"
+                  options={Compania}
+                  //value={valuesdefault}
+                  getOptionLabel={(option) => option.valor}
+                  renderInput={(params) => (
+                    <TextField {...params} label="Compañia" variant="outlined" />
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <DatePicker
+                  views={['year', 'month', 'day']}
+                  label="Mes, dia y año"
+                  value={value}
+                  onChange={(newValue) => changeCumpleAnios(newValue)}
+                  disableFuture={true}
+                  renderInput={(params) => <TextField {...params} helperText={null} />}
+                />
+              </Grid>
+
             </Grid>
-            <Grid item xs={12} md={6}>
-              <Autocomplete
-                onChange={(event, newValue) => {
-                  changeCompania(newValue);
-                }}
-                id="catalogo"
-                name="catalogo"
-                options={Compania}
-                //value={valuesdefault}
-                getOptionLabel={(option) => option.valor}
-                renderInput={(params) => (
-                  <TextField {...params} label="Compañia" variant="outlined" />
-                )}
-              />
+            <Grid container justifyContent="center">
+              <Grid item xs={12} md={6}>
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  color="primary"
+                  size="large"
+                  style={style.submit}
+                  onClick={RegistrarUsuario}
+                >
+                  Enviar
+                </Button>
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                name="FechaCumpleAnios"
-                variant="outlined"
-                fullWidth
-                label="Ingrese su fecha de nacimiento"
-                onChange={IngresarValoresMemoria}
-                value={datos.username || ""}
-              ></TextField>
-            </Grid>
-          </Grid>
-          <Grid container justifyContent="center">
-            <Grid item xs={12} md={6}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                size="large"
-                style={style.submit}
-                onClick={RegistrarUsuario}
-              >
-                Enviar
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-    </Container>
+          </form>
+        </div>
+      </Container>
+    </LocalizationProvider>
   );
 };
 

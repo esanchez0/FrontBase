@@ -204,15 +204,7 @@ const RegistrarUsuarioNueva = () => {
                     type: 'email',
                 }),
             },
-            // {
-            //     accessorKey: 'perfil',
-            //     header: 'Perfil',
-            //     size: 80,
-            //     muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
-            //         ...getCommonEditTextFieldProps(cell),
-            //         //type: 'number',
-            //     }),
-            // },
+           
             {
                 accessorKey: 'perfil',
                 header: 'Roles',

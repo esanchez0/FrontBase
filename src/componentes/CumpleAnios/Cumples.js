@@ -15,15 +15,22 @@ import {
   Grid,
   Autocomplete,
   Container,
+  Collapse,
+  DialogContentText
 } from "@mui/material";
+import Alert from '@mui/material/Alert';
+import CloseIcon from '@mui/icons-material/Close';
 import { Delete, Edit } from "@mui/icons-material";
 import {
   Registrar as Guardar,
   Obtener as ObtenerCumples,
   Eliminar,
 } from "../../actions/CumplesAction";
+import ModalCrud from "./ModalCrud";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
 import style from "../Tool/style";
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const Cumples = () => {
   const [createModalOpen, setCreateModalOpen] = useState(false);
@@ -33,8 +40,20 @@ const Cumples = () => {
   const [Information, setInformation] = useState({}); //Data que se envia cuando se edita
   const [PerfilId, setPerfilId] = useState(""); //Obtiene el perfil cuando va editar
   const [accion, setAccion] = useState(""); //Obtiene la accion para ver que pop up mostrar
-
   const [open, setopen] = useState(false);
+  const [openDialog, setopenDialog] = useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+  const handleClickOpen = () => {
+    setopenDialog(true);
+  };
+
+  const handleClose = () => {
+    setopenDialog(false);
+  };
+
+
   const handleOpen = () => {
     setopen(!open);
   };
@@ -64,21 +83,22 @@ const Cumples = () => {
 
   const handleDeleteRow = useCallback(
     (row) => {
-      if (
-        !window.confirm(
-          `Are you sure you want to delete ${row.getValue("firstName")}`
-        )
-      ) {
-        return;
-      }
+      setopenDialog(true);
+      // if (
+      //   !window.confirm(
+      //     `Desea eliminar este cumple años ${row.getValue("id")}`
+      //   )
+      // ) {
+      //   return;
+      // }
       //send api delete request here, then refetch or update local table data for re-render
-      tableData.splice(row.index, 1);
-      setTableData([...tableData]);
+      // tableData.splice(row.index, 1);
+      // setTableData([...tableData]);
     },
     [obtenerDataGrid]
   );
 
-  const getCommonEditTextFieldProps = useCallback((cell) => {}, []);
+  const getCommonEditTextFieldProps = useCallback((cell) => { }, []);
   //
 
   //Crear Columnas
@@ -109,7 +129,15 @@ const Cumples = () => {
         }),
       },
       {
-        accessorKey: "fechaCumple",
+        accessorKey: "idCompania",
+        header: "CompañiaID",
+        size: 140,
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: "fechaCumpleAnios",
         header: "Fechade Cumple años",
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
           ...getCommonEditTextFieldProps(cell),
@@ -144,10 +172,10 @@ const Cumples = () => {
         }}
         columns={columns}
         data={obtenerDataGrid}
-        initialState={{ columnVisibility: { id: false } }}
+        initialState={{ columnVisibility: { id: false, idCompania: false } }}
         enableColumnOrdering
         enableEditing
-        onEditingRowCancel={handleCancelRowEdits}
+        // onEditingRowCancel={handleCancelRowEdits}
         renderRowActions={({ row, table }) => (
           <Box sx={{ display: "flex", gap: "1rem" }}>
             <Tooltip arrow placement="left" title="Editar">
@@ -171,14 +199,10 @@ const Cumples = () => {
               }}
               variant="contained"
             >
-              Crear Nuevo Usuario
+              Nuevo CumpleAños
             </Button>
             <Button
               onClick={() => alert("Exportar Data")}
-              // onClick={() => {
-              //     setopen(true);
-              //     setAccion("Registrar");
-              // }}
               variant="contained"
             >
               Exportar Datos
@@ -186,6 +210,43 @@ const Cumples = () => {
           </Box>
         )}
       ></MaterialReactTable>
+      <ModalCrud
+        open={open}
+        handleOpen={handleOpen}
+        Information={Information}
+        setopen={setopen}
+        Perfil={PerfilId}
+        Actualizar={ConsultarCumples}
+        Accion={accion}
+      />
+
+      {/* <Button variant="outlined" onClick={handleClickOpen}>
+        Open responsive dialog
+      </Button> */}
+      <Dialog
+        fullScreen={fullScreen}
+        open={openDialog}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Advertencia!!!"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Desea eliminar este cumple años?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClose}>
+            Cancelar
+          </Button>
+          <Button onClick={handleClose} autoFocus>
+            Aceptar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </Container>
   );
 };
