@@ -8,45 +8,35 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  MenuItem,
-  Stack,
-  TextField,
   Tooltip,
-  Grid,
-  Autocomplete,
   Container,
-  Collapse,
   DialogContentText
 } from "@mui/material";
-import Alert from '@mui/material/Alert';
-import CloseIcon from '@mui/icons-material/Close';
 import { Delete, Edit } from "@mui/icons-material";
 import {
-  Registrar as Guardar,
   Obtener as ObtenerCumples,
   Eliminar,
 } from "../../actions/CumplesAction";
 import ModalCrud from "./ModalCrud";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
-import style from "../Tool/style";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useStateValue } from "../../contexto/store";
 
 const Cumples = () => {
   const [{ sesionUsuario }, dispatch] = useStateValue();
-  const [createModalOpen, setCreateModalOpen] = useState(false);
   const [iniciaApp, setIniciaApp] = useState(true);
   const [obtenerDataGrid, setobtenerDataGrid] = useState([]);
 
   const [Information, setInformation] = useState({}); //Data que se envia cuando se edita
-  const [PerfilId, setPerfilId] = useState(""); //Obtiene el perfil cuando va editar
   const [accion, setAccion] = useState(""); //Obtiene la accion para ver que pop up mostrar
+  const [IdCumple, setIdCumple] = useState("");
   const [open, setopen] = useState(false);
+  //Use State para dialogo de borrado
   const [openDialog, setopenDialog] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const [IdCumple, setIdCumple] = useState("");
+
 
   const handleClickOpen = () => {
     setopenDialog(true);
@@ -106,7 +96,7 @@ const Cumples = () => {
   const EliminarRegistro = () => {
     // alert(IdCumple);
     Eliminar(IdCumple).then((response) => {
-     
+
       if (response.status === 200) {
 
         dispatch({
@@ -265,14 +255,11 @@ const Cumples = () => {
         handleOpen={handleOpen}
         Information={Information}
         setopen={setopen}
-        Perfil={PerfilId}
         Actualizar={ConsultarCumples}
         Accion={accion}
       />
 
-      {/* <Button variant="outlined" onClick={handleClickOpen}>
-        Open responsive dialog
-      </Button> */}
+
       <Dialog
         fullScreen={fullScreen}
         open={openDialog}

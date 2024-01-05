@@ -14,7 +14,8 @@ import {
     Tooltip,
     Grid,
     Autocomplete,
-    Container
+    Container,
+    DialogContentText
 } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
 // import { data, states } from './makeData';
@@ -22,13 +23,18 @@ import {
     registrarUsuario as Guardar,
     ObtenerUsuarios,
     obtenerRoles,
+    Eliminar
 } from "../../actions/UsuarioAction";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
-
 import style from "../Tool/style";
 import Modalusuario from "./Modalusuario";
+//Para modal dialogo
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useStateValue } from '../../contexto/store';
 
 const RegistrarUsuarioNueva = () => {
+    const [{ sesionUsuario }, dispatch] = useStateValue();
     const [createModalOpen, setCreateModalOpen] = useState(false);
     const [tableData, setTableData] = useState([]);
     const [validationErrors, setValidationErrors] = useState({});
@@ -40,9 +46,22 @@ const RegistrarUsuarioNueva = () => {
     const [Information, setInformation] = useState({}); //Data que se envia cuando se edita
     const [PerfilId, setPerfilId] = useState(""); //Obtiene el perfil cuando va editar
     const [accion, setAccion] = useState(""); //Obtiene la accion para ver que pop up mostrar
-
-
     const [open, setopen] = useState(false);
+    const [idEliminar, setidEliminar] = useState("");
+    //Use State para dialogo de borrado
+    const [openDialog, setopenDialog] = useState(false);
+    const theme = useTheme();
+    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+
+
+    const handleClickOpen = () => {
+        setopenDialog(true);
+    };
+
+    const handleClose = () => {
+        setopenDialog(false);
+    };
+
     const handleOpen = () => {
         setopen(!open);
     };
@@ -115,17 +134,48 @@ const RegistrarUsuarioNueva = () => {
 
     const handleDeleteRow = useCallback(
         (row) => {
-            if (
-                !window.confirm(`Are you sure you want to delete ${row.getValue('firstName')}`)
-            ) {
-                return;
-            }
-            //send api delete request here, then refetch or update local table data for re-render
-            tableData.splice(row.index, 1);
-            setTableData([...tableData]);
+            setidEliminar(row.getValue('idUsuario'));
+            handleClickOpen();
+            // if (
+            //     !window.confirm(`Are you sure you want to delete ${row.getValue('firstName')}`)
+            // ) {
+            //     return;
+            // }
+            // //send api delete request here, then refetch or update local table data for re-render
+            // tableData.splice(row.index, 1);
+            // setTableData([...tableData]);
         },
         [tableData],
     );
+
+    const EliminarRegistro = () => {
+    
+        Eliminar(idEliminar).then((response) => {
+
+            if (response.status === 200) {
+
+                dispatch({
+                    type: "OPEN_SNACKBAR",
+                    openMensaje: {
+                        open: true,
+                        mensaje: "Se elimino exitosamente el Cumple años.",
+                    },
+                });
+                Consultarusuarios();
+            } else {
+                dispatch({
+                    type: "OPEN_SNACKBAR",
+                    openMensaje: {
+                        open: true,
+                        mensaje:
+                            "Errores al intentar eliminar en : " +
+                            Object.keys(response.data.errors),
+                    },
+                });
+            }
+        });
+        setopenDialog(false);
+    };
 
     const handleEdit = useCallback(
         (row) => {
@@ -204,7 +254,7 @@ const RegistrarUsuarioNueva = () => {
                     type: 'email',
                 }),
             },
-           
+
             {
                 accessorKey: 'perfil',
                 header: 'Roles',
@@ -302,6 +352,31 @@ const RegistrarUsuarioNueva = () => {
                     Actualizar={Consultarusuarios}
                     Accion={accion}
                 />
+
+                <Dialog
+                    fullScreen={fullScreen}
+                    open={openDialog}
+                    onClose={handleClose}
+                    aria-labelledby="responsive-dialog-title"
+                >
+                    <DialogTitle id="responsive-dialog-title">
+                        {"Advertencia!!!"}
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText>
+                            Desea eliminar este usuario?
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button autoFocus onClick={handleClose}>
+                            Cancelar
+                        </Button>
+                        <Button onClick={EliminarRegistro} autoFocus>
+                            Aceptar
+                        </Button>
+                    </DialogActions>
+                </Dialog>
+
             </>
         </Container>
     );

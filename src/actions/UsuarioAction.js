@@ -111,3 +111,16 @@ export const obtenerRoles = () => {
     });
   });
 };
+
+
+export const Eliminar = (id) => {
+  return new Promise((resolve, eject) => {
+    //httpCliente.delete("/CumpleAnios/Eliminar").then((response) => {
+       httpCliente.delete("/Usuario/Eliminar/" + id).then((response) => {
+      resolve(response);
+    }).catch((error) => {
+      console.log(error.response);
+      resolve(error.response);
+    });
+  });
+};
