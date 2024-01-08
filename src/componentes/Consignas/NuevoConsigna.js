@@ -125,6 +125,14 @@ const Cumples = () => {
         }),
       },
       {
+        accessorKey: "tipoIncidenciaId",
+        header: "Tipo Incidencia Id",
+        size: 140,
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
         accessorKey: "operadorId",
         header: "OperadorId",
         size: 140,
@@ -200,7 +208,7 @@ const Cumples = () => {
         }}
         columns={columns}
         data={obtenerDataGrid}
-        initialState={{ columnVisibility: {consignaId: false,operadorId:false, seReportoId:false } }}
+        initialState={{ columnVisibility: {consignaId: false,operadorId:false, seReportoId:false,tipoIncidenciaId:false } }}
         enableColumnOrdering
         enableEditing
         // onEditingRowCancel={handleCancelRowEdits}

@@ -68,12 +68,9 @@ const EditarConsigna = (props) => {
   useEffect(() => {
 
     setDatos(props.AtributoData);
-
     ConsultarCatTipoIncidencia();
     Consultarusuarios();
     console.log(props.AtributoData);
-
-    console.log(props.AtributoData.operadorId);
     setIniciaApp(false);
   }, [iniciaApp]);
 
@@ -176,17 +173,39 @@ const EditarConsigna = (props) => {
           <form style={style.form}>
             <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-
+                <Stack spacing={3}>
+                  <DateTimePicker
+                    disableFuture
+                    hideTabs
+                    openTo="hours"
+                    value={dayjs(datos.fechaYHora)}
+                    onChange={(newValue) => {
+                      changeFechaYHora(newValue);
+                    }}
+                    minDate={dayjs('2018-01-01')}
+                    components={{
+                      LeftArrowIcon: AlarmIcon,
+                      RightArrowIcon: SnoozeIcon,
+                      OpenPickerIcon: ClockIcon,
+                    }}
+                    minTime={dayjs('2018-01-01T09:00')}
+                    maxTime={dayjs('2018-01-01T20:00')}
+                    renderInput={(params) => (
+                      <TextField {...params} helperText="Fecha y hora" />
+                    )}
+                  />
+                </Stack>
               </Grid>
               <Grid item xs={12} md={6}>
                 <ListSelector
-                  dataSource={obtenerUsuarios}
-                  selectedValue={datos.seReportoId}
+                  dataSource={TipoIncidencia}
+                  selectedValue={datos.tipoIncidenciaId}
                   label="Tipo incidencia:"
-                  //onChange={(event, newValue) => {
-                  //  changeTipoIncidencia(newValue);
+                  onChange={(event, newValue) => {
+                  changeTipoIncidencia(newValue);
+                  }}
                   idField="id"
-                  textField="nombreCompleto"
+                  textField="valor"
                 />
               </Grid>
               <Grid item xs={12} md={12}>
@@ -204,11 +223,11 @@ const EditarConsigna = (props) => {
                    dataSource={obtenerUsuarios}
                    selectedValue={datos.seReportoId}
                    label="Se reporto a:"
-                  //onChange={(event, newValue) => {
-                   //  changeSeReportoA(newValue);
-                   //}}
-                  idField="id"
-                  textField="nombreCompleto"
+                    onChange={(event, newValue) => {
+                      changeSeReportoA(newValue);
+                    }}
+                    idField="idUsuario"
+                    textField="nombreCompleto"
                 />
               </Grid>              
               <Grid item xs={12} md={6}>
@@ -216,10 +235,10 @@ const EditarConsigna = (props) => {
                     dataSource={obtenerUsuarios}
                     selectedValue={datos.operadorId}
                     label="Operador:"
-                  // onChange={(event, newValue) => {
-                  //   changeOperador(newValue);
-                  // }}
-                  idField="id"
+                    onChange={(event, newValue) => {
+                     changeOperador(newValue);
+                     }}
+                  idField="idUsuario"
                   textField="nombreCompleto"
                 />
               </Grid>

@@ -46,7 +46,7 @@ export default function ListSelector(props) {
           setCtrlValue("");
         }
       } catch (e) {
-        console.log("Se presentó un problema.");
+        console.log("Se presentó un problema."+JSON.stringify(e));
       }
     }
   };
