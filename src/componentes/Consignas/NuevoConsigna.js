@@ -1,294 +1,279 @@
-import React, { useState, useEffect, useRef } from "react";
-import style from "../Tool/style";
-import { Button, Container, Grid, TextField, Typography } from "@mui/material";
-import { useStateValue } from "../../contexto/store";
-import TextBox from "../UI/TextBox";
-//import { ConsultarCargaResguardo } from "../../actions/CargaResguardoAction";
-import Accordion from "@mui/material/Accordion";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-//import { CargarResguardo } from "../../actions/CargaResguardoAction";
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
-import Calender from "../UI/Calender";
-import ListSelector from "../UI/ListSelector"
-import { MaterialReactTable} from 'material-react-table';
+import React, { useCallback, useMemo, useState, useEffect } from "react";
+import { MaterialReactTable } from "material-react-table";
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  IconButton,
+  Tooltip,
+  Container,
+  DialogContentText
+} from "@mui/material";
+import { Delete, Edit } from "@mui/icons-material";
+import {
+  Obtener as ObtenerCumples,
+  Eliminar,
+} from "../../actions/ConsignasAction";
+import ModalCrud from "./ModalCrud";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useStateValue } from "../../contexto/store";
 
-const Nuevo = (props) => {
+const Cumples = () => {
+  const [{ sesionUsuario }, dispatch] = useStateValue();
   const [iniciaApp, setIniciaApp] = useState(true);
-  const [{ sesionUsuario, openSnackbar }, dispatch] = useStateValue(); //useStateValue();
+  const [obtenerDataGrid, setobtenerDataGrid] = useState([]);
+  const [Information, setInformation] = useState({}); //Data que se envia cuando se edita
+  const [accion, setAccion] = useState(""); //Obtiene la accion para ver que pop up mostrar
+  const [IdConsigna, setIdConsigna] = useState("");
+  const [open, setopen] = useState(false);
+  //Use State para dialogo de borrado
+  const [openDialog, setopenDialog] = useState(false);
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-  const [setCargaResguardo] = useState([]);
 
+  const handleClickOpen = () => {
+    setopenDialog(true);
+  };
+
+  const handleClose = () => {
+    setopenDialog(false);
+  };
+
+
+  const handleOpen = () => {
+    setopen(!open);
+  };
+
+  //Eventos de estado
   useEffect(() => {
-    //ConsultarCargaResguardoAction();
+    ConsultarCumples();
     setIniciaApp(false);
   }, [iniciaApp]);
 
-  const rows = [];
-
- /* Object.keys(CargaResguardo).forEach(function (key) {
-    rows.push(CargaResguardo[key]);
-    //console.log("Row:"+JSON.stringify(rows));
-
-  });
-  */
-
-/*
-  const ConsultarCargaResguardoAction = async () => {
-
-    const response = await ConsultarCargaResguardo("");
-
-    if (response.status === 200) {
-      setCargaResguardo(response.data);
-      //console.log(JSON.stringify(response));
-    }
-
-  };*/
-
-  const refFileUpload = useRef();
-
-  /*
-  const CargaResguardoAction = async () => {
-
-    const dataForm = refFileUpload.current.obtenerFormData();
-
-    if (dataForm == undefined || dataForm.hasValue == undefined || dataForm.hasValue == null || dataForm.hasValue == false) {
-      dispatch({
-        type: "OPEN_SNACKBAR",
-        openMensaje: {
-          open: true,
-          mensaje: "Debe seleccionar un archivo CSV valido",
-        },
-      });
-
-      return;
-    }
-
-    //const response = await CargarResguardo(dataForm.formData);
-
-    if (response.status === 200) {
-      dispatch({
-        type: "OPEN_SNACKBAR",
-        openMensaje: {
-          open: true,
-          mensaje: response.data.respuesta,
-        },
-      });
-
-      ConsultarCargaResguardoAction();
-
-      console.log(JSON.stringify(response));
-    } else {
-
-      dispatch({
-        type: "OPEN_SNACKBAR",
-        openMensaje: {
-          open: true,
-          mensaje: response.data.respuesta,
-        },
-      });
-    }
-
-  };*/
-
-  const refModalDetalle = useRef();
-  const [abrirModalDetalleBandera, setAbrirModalDetalle] = useState(false);
-
-  const onChangeFecha = (date) => {
-    console.log(date);
+  //------------  Solicitudes BD  -------------
+  const ConsultarCumples = async () => {
+    const response = await ObtenerCumples();
+    setobtenerDataGrid(response.data.listaResultado);
   };
 
-  const handlesetAbrirModalDetalle = (detalle) => {
-    refModalDetalle.current.cargarDatos(detalle);
-    setAbrirModalDetalle(!abrirModalDetalleBandera);
-  };
-
-  const handlesetCerrarModalDetalle = (detalle) => {
-    setAbrirModalDetalle(!abrirModalDetalleBandera);
-  };
-  const data = [
-    {
-      tipo:'Operador',
-      fecha: '31/11/2022 11:37',
-      incidencia: 'No estaba el vigilante',
-      sereportoa: 'Jose Luis Parra',
-      operador:'Miguel perales'
+  //Eventos del GRID
+  const handleEdit = useCallback(
+    (row) => {
+      setopen(true);
+      setInformation(row.original);
+      setAccion("Edicion");
+      ConsultarCumples();
     },
-    {
-      tipo:'Operador',
-      fecha: '31/11/2022 11:37',
-      incidencia: 'No estaba el vigilante',
-      sereportoa: 'Jose Luis Parra',
-      operador:'Miguel perales'
+    [obtenerDataGrid]
+  );
+
+  const handleDeleteRow = useCallback(
+    (row) => {
+      setopenDialog(true);
+      setIdConsigna(row.getValue("consignaId"));
     },
-    
-  ];
-  const columns = [
-      {
-        accessorKey: 'tipo', //normal accessorKey
-        header: 'Tipo',
-        size: 200,
-      },
-      {
-        accessorKey: 'fecha',
-        header: 'Fecha y hora',
-        size: 150,
-      },
-      {
-        accessorKey: 'incidencia',
-        header: 'Incidencia',
-        size: 150,
-      },
-      {
-        accessorKey: 'sereportoa',
-        header: 'Se reporto a',
-        size: 150,
-      },
-      {
-        accessorKey: 'operador',
-        header: 'Operador',
-        size: 150,
-      },
-      {
-        accessorKey: 'detalles',
-        header: 'Ver Detalle',
-        size: 150,
+    [obtenerDataGrid]
+  );
+
+  const EliminarRegistro = () => {
+    // alert(IdConsigna);
+    Eliminar(IdConsigna).then((response) => {
+
+      if (response.status === 200) {
+
+        dispatch({
+          type: "OPEN_SNACKBAR",
+          openMensaje: {
+            open: true,
+            mensaje: "Se elimino exitosamente la consigna.",
+          },
+        });
+        ConsultarCumples();
+      } else {
+        dispatch({
+          type: "OPEN_SNACKBAR",
+          openMensaje: {
+            open: true,
+            mensaje:
+              "Errores al intentar eliminar en : " +
+              Object.keys(response.data.errors),
+          },
+        });
       }
-    ];
+    });
+    setopenDialog(false);
+  };
 
+  const getCommonEditTextFieldProps = useCallback((cell) => { }, []);
+  //
+
+  //Crear Columnas
+  const columns = useMemo(
+    () => [
+      {
+        accessorKey: "consignaId",
+        header: "ConsignaId",
+        size: 140,
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: "operadorId",
+        header: "OperadorId",
+        size: 140,
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: "seReportoId",
+        header: "SeReportoId",
+        size: 140,
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: "incidencia",
+        header: "Incidencia",
+        size: 140,
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: "fechaYHora",
+        header: "FechaYHora",
+        size: 140,
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: "operadorNombre",
+        header: "Operador",
+        size: 140,
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: "seReportoNombre",
+        header: "Se Reporto a",
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell)        }),
+      },
+      {
+        accessorKey: "tipoIncidencia",
+        header: "TipoIncidencia",
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell)        }),
+      }
+    ],
+    [getCommonEditTextFieldProps]
+  );
+  //
 
   return (
     <Container
       container="main"
       maxWidth="lg"
       justifycontent="center"
-      style={style.Container}
+      style={{ paddingTop: 10 }}
     >
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header">
-          <Typography>Consignas</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <div style={style.paper}>
-            <Typography component="h1" variant="h5">
-              Nueva consigna
-            </Typography>
-            <form style={style.form}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={12}>
-            <ListSelector
-                dataSource={[{id:1,descripcion:"Consigna"},{id:2,descripcion:"Incidente"}]}       
-                //selectedValue={datos.estadoId}
-                label="Tipo:"
-                // onChange={(event, newValue) => {
-                //   changeEstado(newValue);
-                // }}
-                idField="id"
-                textField="descripcion"
-            /> 
-            </Grid>
-            <Grid item xs={12} md={6}>
-            <Calender
-                fullScreen={false}
-                onChange={onChangeFecha}
-            // DateFormat="dd-MM-yyyy"
-            ></Calender>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <TextField
-                name="Hora"
-                variant="outlined"
-                fullWidth
-                label="Ingrese Hora"
-                //onChange={IngresarValoresMemoria}
-                //value={datos.username || ""}
-              ></TextField>
-            </Grid>
-            <Grid item xs={12} md={12}>
-              <TextBox
-                id="Incidencia"
-                name="Incidencia"
-                value=""
-                fullWidth
-                label="Ingrese Incidencia"
-                //onChange={IngresarValoresMemoria}
-                //value={datos.password || ""}
-                required={true}
-                requiredLabel={"Ingrese Informacion"}
-              ></TextBox>
-            </Grid>
-            <Grid item xs={12} md={6}>
-            <ListSelector
-                dataSource={[{id:1,descripcion:"Luis"},{id:2,descripcion:"Abel"}]}       
-                //selectedValue={datos.estadoId}
-                label="Se reporto a:"
-                // onChange={(event, newValue) => {
-                //   changeEstado(newValue);
-                // }}
-                idField="id"
-                textField="descripcion"
-            />
-            </Grid>
-            <Grid item xs={12} md={6}>
-            <ListSelector
-                dataSource={[{id:1,descripcion:"Luis"},{id:2,descripcion:"Abel"}]}       
-                //selectedValue={datos.estadoId}
-                label="Operador:"
-                // onChange={(event, newValue) => {
-                //   changeEstado(newValue);
-                // }}
-                idField="id"
-                textField="descripcion"
-            /> 
-            </Grid>
-          </Grid>
-          <Grid container justifyContent="center">
-            <Grid item xs={12} md={6}>
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                size="large"
-                color="primary"
-                style={style.submit}
-                //onClick={ActualizarDatos}
-              >
-                Guardar Datos
-              </Button>
-            </Grid>
-          </Grid>
-        </form>
-          </div>
-        </AccordionDetails>
-      </Accordion>
+      <MaterialReactTable
+        localization={MRT_Localization_ES}
+        displayColumnDefOptions={{
+          "mrt-row-actions": {
+            muiTableHeadCellProps: {
+              align: "center",
+            },
+            size: 120,
+          },
+        }}
+        columns={columns}
+        data={obtenerDataGrid}
+        initialState={{ columnVisibility: {consignaId: false,operadorId:false, seReportoId:false } }}
+        enableColumnOrdering
+        enableEditing
+        // onEditingRowCancel={handleCancelRowEdits}
+        renderRowActions={({ row, table }) => (
+          <Box sx={{ display: "flex", gap: "1rem" }}>
+            <Tooltip arrow placement="left" title="Editar">
+              <IconButton onClick={() => handleEdit(row)}>
+                <Edit />
+              </IconButton>
+            </Tooltip>
+            <Tooltip arrow placement="right" title="Eliminar">
+              <IconButton color="error" onClick={() => handleDeleteRow(row)}>
+                <Delete />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        )}
+        renderTopToolbarCustomActions={() => (
+          <Box sx={{ display: "flex", gap: "1rem", p: "4px" }}>
+            <Button
+              onClick={() => {
+                setopen(true);
+                setAccion("Registrar");
+              }}
+              variant="contained"
+            >
+              Nueva Consgina
+            </Button>
+            <Button
+              onClick={() => alert("Exportar Data")}
+              variant="contained"
+            >
+              Exportar Datos
+            </Button>
+          </Box>
+        )}
+      ></MaterialReactTable>
+      <ModalCrud
+        open={open}
+        handleOpen={handleOpen}
+        Information={Information}
+        setopen={setopen}
+        Actualizar={ConsultarCumples}
+        Accion={accion}
+      />
 
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel2a-content"
-          id="panel2a-header"
-        >
-          <Typography>Consulta</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <div className="flex flex-col  w-full mt-10 ">
-            <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-              <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-                <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-                <MaterialReactTable localization={MRT_Localization_ES} columns={columns} data={data} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </AccordionDetails>
-      </Accordion>
+
+      <Dialog
+        fullScreen={fullScreen}
+        open={openDialog}
+        onClose={handleClose}
+        aria-labelledby="responsive-dialog-title"
+      >
+        <DialogTitle id="responsive-dialog-title">
+          {"Advertencia!!!"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Desea eliminar esta consigna ? 
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClose}>
+            Cancelar
+          </Button>
+          <Button onClick={EliminarRegistro} autoFocus>
+            Aceptar
+          </Button>
+        </DialogActions>
+      </Dialog>
+
     </Container>
   );
 };
 
-export default Nuevo;
+export default Cumples;

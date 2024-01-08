@@ -1,7 +1,7 @@
 import { React } from "react";
 import { Modal, Box } from "@mui/material";
-import RegistrarCumple from "./RegistrarCumple";
-import EditarCumple from "./EditarCumple";
+import RegistrarConsigna from "./RegistrarConsigna";
+import EditarConsigna from "./EditarConsigna";
 
 
 const ModalCrud = ({
@@ -22,7 +22,7 @@ const ModalCrud = ({
   let componenet;
   if (Accion === "Registrar") {
     componenet = (
-      <RegistrarCumple
+      <RegistrarConsigna
         AtributoData={Information}
         AtributoCerrarModal={cerrarModal}
         AtributoActualizarUsuarios={Actualizar}
@@ -32,7 +32,7 @@ const ModalCrud = ({
   }
   else if (Accion === "Edicion") {  
     componenet = (
-      <EditarCumple
+      <EditarConsigna
         AtributoData={Information}
         AtributoCerrarModal={cerrarModal}
         AtributoActualizarUsuarios={Actualizar}
@@ -42,6 +42,10 @@ const ModalCrud = ({
   }
   else {
     console.log("otra");
+    // componenet = (
+    //   <ResetearPassword AtributoData={Information} AtributoCerrarModal={cerrarModal}
+    //   AtributoActualizarUsuarios={Actualizar} />
+    // );
   }
 
   return (
