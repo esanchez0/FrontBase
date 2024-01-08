@@ -7,6 +7,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 export default function ListSelector(props) {
   //const classes = useStyles();
+  console.log("List select:"+props.selectedValue);
   const [idField, setIdField] = useState(props.idField || "id");
   const [textField, setTextField] = useState(props.textField || "descripcion");
   const [dataList, setDataList] = useState(props.dataSource);

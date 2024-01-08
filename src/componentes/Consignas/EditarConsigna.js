@@ -5,7 +5,6 @@ import {
   Grid,
   TextField,
   Button,
-  Autocomplete,
 } from "@mui/material";
 import style from "../Tool/style";
 import { Registrar, Obtener } from "../../actions/ConsignasAction";
@@ -39,22 +38,22 @@ const EditarConsigna = (props) => {
 
 
   const [datos, setDatos] = useState({
-    ConsignaId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-    Incidencia: "",
-    TipoIncidenciaId: "",
-    SeReportoId: "",
-    OperadorId: "",
-    FechaYHora: new Date("YYYY-MM-DD")
+    consignaId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    incidencia: "",
+    tipoIncidenciaId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    seReportoId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    operadorId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    fechaYHora: new Date("YYYY-MM-DD")
     });
 
   const LimpiarCajas = () => {
     setDatos({
-      ConsignaId: "",
-      Incidencia: "",
-      TipoIncidenciaId: "",
-      SeReportoId: "",
-      OperadorId: "",
-      FechaYHora: ""
+      consignaId: "",
+      incidencia: "",
+      tipoIncidenciaId: "",
+      seReportoId: "",
+      operadorId: "",
+      fechaYHora: ""
     });
   };
 
@@ -67,10 +66,14 @@ const EditarConsigna = (props) => {
   };
 
   useEffect(() => {
-    ConsultarCatTipoIncidencia();
+
     setDatos(props.AtributoData);
+
+    ConsultarCatTipoIncidencia();
     Consultarusuarios();
     console.log(props.AtributoData);
+
+    console.log(props.AtributoData.operadorId);
     setIniciaApp(false);
   }, [iniciaApp]);
 
@@ -176,18 +179,14 @@ const EditarConsigna = (props) => {
 
               </Grid>
               <Grid item xs={12} md={6}>
-                <Autocomplete
-                  onChange={(event, newValue) => {
-                    changeTipoIncidencia(newValue);
-                  }}
-                  id="TipoIncidenciaId"
-                  name="TipoIncidenciaId"
-                  options={TipoIncidencia}
-                  getOptionLabel={(option) => option.valor}
-                  selectedValue={datos.TipoIncidenciaId}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Tipo incidencia" variant="outlined" />
-                  )}
+                <ListSelector
+                  dataSource={obtenerUsuarios}
+                  selectedValue={datos.seReportoId}
+                  label="Tipo incidencia:"
+                  //onChange={(event, newValue) => {
+                  //  changeTipoIncidencia(newValue);
+                  idField="id"
+                  textField="nombreCompleto"
                 />
               </Grid>
               <Grid item xs={12} md={12}>
@@ -202,26 +201,26 @@ const EditarConsigna = (props) => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <ListSelector
+                   dataSource={obtenerUsuarios}
+                   selectedValue={datos.seReportoId}
+                   label="Se reporto a:"
                   //onChange={(event, newValue) => {
                    //  changeSeReportoA(newValue);
                    //}}
                   idField="id"
                   textField="nombreCompleto"
-                  dataSource={obtenerUsuarios}
-                  selectedValue={props.AtributoData.seReportoId}
-                  label="Se reporto a:"
                 />
               </Grid>              
               <Grid item xs={12} md={6}>
                 <ListSelector
+                    dataSource={obtenerUsuarios}
+                    selectedValue={datos.operadorId}
+                    label="Operador:"
                   // onChange={(event, newValue) => {
                   //   changeOperador(newValue);
                   // }}
                   idField="id"
                   textField="nombreCompleto"
-                  dataSource={obtenerUsuarios}
-                  selectedValue={props.AtributoData.operadorId}
-                  label="Operador:"
                 />
               </Grid>
 
