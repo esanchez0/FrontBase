@@ -98,14 +98,14 @@ const EditarConsigna = (props) => {
   const changeSeReportoA= (e) => {
     setDatos((anterior) => ({
       ...anterior,
-      SeReportoId: e.idUsuario,
+      SeReportoId: e,
     }));
   };
 
   const changeOperador= (e) => {
     setDatos((anterior) => ({
       ...anterior,
-      OperadorId: e.idUsuario,
+      OperadorId: e,
     }));
   };
 
