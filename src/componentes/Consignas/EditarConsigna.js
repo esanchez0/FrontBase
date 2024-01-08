@@ -24,6 +24,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import Stack from '@mui/material/Stack';
 import { DatePicker, LocalizationProvider, esES } from '@mui/x-date-pickers';
+import ListSelector from "../UI/ListSelector";
 
 //-------------------------Control fecha y hora
 
@@ -67,8 +68,9 @@ const EditarConsigna = (props) => {
 
   useEffect(() => {
     ConsultarCatTipoIncidencia();
+    setDatos(props.AtributoData);
     Consultarusuarios();
-
+    console.log(props.AtributoData);
     setIniciaApp(false);
   }, [iniciaApp]);
 
@@ -171,28 +173,7 @@ const EditarConsigna = (props) => {
           <form style={style.form}>
             <Grid container spacing={2}>
             <Grid item xs={12} md={6}>
-                <Stack spacing={3}>
-                  <DateTimePicker
-                    disableFuture
-                    hideTabs
-                    openTo="hours"
-                    value={datos.FechaYHora}
-                    onChange={(newValue) => {
-                      changeFechaYHora(newValue);
-                    }}
-                    minDate={dayjs('2018-01-01')}
-                    components={{
-                      LeftArrowIcon: AlarmIcon,
-                      RightArrowIcon: SnoozeIcon,
-                      OpenPickerIcon: ClockIcon,
-                    }}
-                    minTime={dayjs('2018-01-01T09:00')}
-                    maxTime={dayjs('2018-01-01T20:00')}
-                    renderInput={(params) => (
-                      <TextField {...params} helperText="Fecha y hora" />
-                    )}
-                  />
-                </Stack>
+
               </Grid>
               <Grid item xs={12} md={6}>
                 <Autocomplete
@@ -220,33 +201,27 @@ const EditarConsigna = (props) => {
                 ></TextField>
               </Grid>
               <Grid item xs={12} md={6}>
-                <Autocomplete
-                  onChange={(event, newValue) => {
-                    changeSeReportoA(newValue);
-                  }}
-                  id="seReportoId"
-                  name="seReportoId"
-                  options={obtenerUsuarios}
-                  getOptionLabel={(option) => option.nombreCompleto}
-                  selectedValue={datos.seReportoId}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Se reporto a:" variant="outlined" />
-                  )}
+                <ListSelector
+                  //onChange={(event, newValue) => {
+                   //  changeSeReportoA(newValue);
+                   //}}
+                  idField="id"
+                  textField="nombreCompleto"
+                  dataSource={obtenerUsuarios}
+                  selectedValue={props.AtributoData.seReportoId}
+                  label="Se reporto a:"
                 />
               </Grid>              
               <Grid item xs={12} md={6}>
-                <Autocomplete
-                  onChange={(event, newValue) => {
-                    changeOperador(newValue);
-                  }}
-                  id="OperadorId"
-                  name="OperadorId"
-                  options={obtenerUsuarios}
-                  getOptionLabel={(option) => option.nombreCompleto}
-                  selectedValue={datos.optionsperadorId}
-                  renderInput={(params) => (
-                    <TextField {...params} label="Operador" variant="outlined" />
-                  )}
+                <ListSelector
+                  // onChange={(event, newValue) => {
+                  //   changeOperador(newValue);
+                  // }}
+                  idField="id"
+                  textField="nombreCompleto"
+                  dataSource={obtenerUsuarios}
+                  selectedValue={props.AtributoData.operadorId}
+                  label="Operador:"
                 />
               </Grid>
 

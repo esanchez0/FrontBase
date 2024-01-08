@@ -31,6 +31,9 @@ const ModalCrud = ({
     );
   }
   else if (Accion === "Edicion") {  
+
+    console.log(Information);
+
     componenet = (
       <EditarConsigna
         AtributoData={Information}
