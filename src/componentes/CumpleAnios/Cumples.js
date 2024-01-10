@@ -10,7 +10,9 @@ import {
   IconButton,
   Tooltip,
   Container,
-  DialogContentText
+  DialogContentText,
+  Alert,
+  AlertTitle
 } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import {
@@ -22,6 +24,9 @@ import { MRT_Localization_ES } from "material-react-table/locales/es";
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useStateValue } from "../../contexto/store";
+import { v4 as uuidv4 } from 'uuid';
+import { name } from "dayjs/locale/es";
+import ControlAlert from "./../UI/ControlAlert";
 
 const Cumples = () => {
   const [{ sesionUsuario }, dispatch] = useStateValue();
@@ -32,10 +37,16 @@ const Cumples = () => {
   const [accion, setAccion] = useState(""); //Obtiene la accion para ver que pop up mostrar
   const [IdCumple, setIdCumple] = useState("");
   const [open, setopen] = useState(false);
-  //Use State para dialogo de borrado
+  //UseState para dialogo de borrado
   const [openDialog, setopenDialog] = useState(false);
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  //UseState para alert
+  const [listaErrores, setErrores] = useState([]); //Arreglo de los errores que se mostraran
+  const [openAlert, setopenAlert] = useState(false); //Bandera para mostrar y ocultar alert
+  const [tipoAlert, settipoAlert] = useState('error'); //tipo de error, warning o mensaje
+  const [tituloAlerta, settituloAlerta] = useState('Error'); //titulo
+
 
 
   const handleClickOpen = () => {
@@ -49,6 +60,10 @@ const Cumples = () => {
 
   const handleOpen = () => {
     setopen(!open);
+  };
+
+  const handleOpenAlert = () => {
+    setopenAlert(!openAlert);
   };
 
   //Eventos de estado
@@ -66,18 +81,27 @@ const Cumples = () => {
   //Eventos del GRID
   const handleEdit = useCallback(
     (row) => {
+
+      setErrores([
+        ...listaErrores,
+        { id: uuidv4(), descripcion: "Editar" }
+      ]);
+
+
+
       setopen(true);
       setInformation(row.original);
       setAccion("Edicion");
       ConsultarCumples();
     },
-    [obtenerDataGrid]
+    // [obtenerDataGrid]
   );
 
   const handleDeleteRow = useCallback(
     (row) => {
-      setopenDialog(true);
+
       setIdCumple(row.getValue("id"));
+      setopenDialog(true);
 
       // if (
       //   !window.confirm(
@@ -193,6 +217,8 @@ const Cumples = () => {
   );
   //
 
+
+
   return (
     <Container
       container="main"
@@ -236,13 +262,21 @@ const Cumples = () => {
               onClick={() => {
                 setopen(true);
                 setAccion("Registrar");
+                setErrores([
+                  ...listaErrores,
+                  { id: uuidv4(), descripcion: "Registrar" }
+                ]);
+
               }}
               variant="contained"
             >
               Nuevo CumpleAños
             </Button>
             <Button
-              onClick={() => alert("Exportar Data")}
+              onClick={() => {
+                alert("exportar datos");
+
+              }}
               variant="contained"
             >
               Exportar Datos
@@ -257,6 +291,16 @@ const Cumples = () => {
         setopen={setopen}
         Actualizar={ConsultarCumples}
         Accion={accion}
+      />
+
+      <ControlAlert
+        errores={listaErrores}
+        setErrores={setErrores}
+        open={openAlert}
+        handleOpen={handleOpenAlert}
+        setopen={setopenAlert}
+        tipoAlerta={tipoAlert}
+        tituloAlerta={tituloAlerta}
       />
 
 

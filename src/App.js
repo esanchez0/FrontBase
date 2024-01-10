@@ -8,18 +8,11 @@ import { useStateValue } from "./contexto/store";
 import RutaSegura from "./componentes/navegacion/RutaSegura";
 import ProtectedRoute from "./componentes/navegacion/ProtectedRoute";
 import { ObtenerUsuarioActual } from "./actions/UsuarioAction";
-import RegistrarUsuario from "./componentes/seguridad/RegistrarUsuario";
 import Login from "./componentes/seguridad/Login";
 import PerfilUsuario from "./componentes/seguridad/PerfilUsuario";
-
-
-//Pantallas de testeo borrar
-import TesteoComponentes from "./componentes/TesteoComponentes"
-import TestsGrid from "./componentes/TestsGrid"
 import Consigna from "./componentes/Consignas/NuevoConsigna"
 import Incidencia from "./componentes/Incidencias/NuevaIncidencia"
 import RegistrarUsuarioNueva from "./componentes/seguridad/RegistrarUsuarioNueva";
-import RegistrarCumple from "./componentes/CumpleAnios/RegistrarCumple";
 import Cumples from "./componentes/CumpleAnios/Cumples";
 
 function App() {

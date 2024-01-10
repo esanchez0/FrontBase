@@ -33,8 +33,7 @@ const Login = () => {
     e.preventDefault();
 
     loginUsuario(datos, dispatch).then((response) => {
-      if (response.status === 200) {
-        //console.log("login exitoso!!!", response.data);
+      if (response.status === 200) {  
         window.localStorage.setItem("token_seguridad", response.data.token);
         navigate("/");
       } else {

@@ -36,7 +36,6 @@ export const EliminarRol = (datos) => {
         resolve(response);
       })
       .catch((error) => {
-        console.log(error.response);
         resolve(error.response);
       });
   });

@@ -260,8 +260,7 @@ const RegistrarUsuarioNueva = () => {
                 header: 'Roles',
                 muiTableBodyCellEditTextFieldProps: {
                     select: true, //change to select for a dropdown
-                    children: rowsRoles.map((state) => (
-                        //  console.log(state)
+                    children: rowsRoles.map((state) => (                   
                         <MenuItem key={state.id} value={state.name}>
                             {state}
                         </MenuItem>

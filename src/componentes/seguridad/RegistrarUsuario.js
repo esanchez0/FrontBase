@@ -95,11 +95,9 @@ const RegistrarUsuario = () => {
 
   const RegistrarUsuario = (e) => {
     e.preventDefault();
-    console.log(datos);
 
     Guardar(datos).then((response) => {
       if (response.status === 200) {
-        console.log("Se registro el usuario", response);
         window.localStorage.setItem("token_seguridad", response.data.token); //Almacenando token
         dispatch({
           type: "OPEN_SNACKBAR",

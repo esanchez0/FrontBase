@@ -27,10 +27,14 @@ export const Registrar = (data) => {
       .post("/CumpleAnios", data)
       .then((response) => {
         resolve(response);
-      })
-      .catch((error) => {
+      }) 
+      .catch(error => {
         resolve(error.response);
       });
+      // .catch((error) => {
+      //   console.log(error);
+      //   resolve(error.response);
+      // });
   });
 };
 

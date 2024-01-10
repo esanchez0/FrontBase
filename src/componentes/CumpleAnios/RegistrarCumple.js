@@ -22,18 +22,34 @@ import dayjs from 'dayjs';
 // import es from 'date-fns/locale/es';
 // import { es } from 'date-fns/locale'
 import es from 'dayjs/locale/es';
+import ControlAlert from "../UI/ControlAlert";
+import TextBox from "../UI/TextBox";
+import { v4 as uuidv4 } from 'uuid';
+import isEmail from 'validator/lib/isEmail';
+import ListSelector from "../UI/ListSelector";
 
 const RegistrarCumple = (props) => {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [ObtenerCumples, setObtenerCumples] = useState([]); //Obtiene los usuarios para cargar grid
   const [iniciaApp, setIniciaApp] = useState(true);
   const [Compania, setCompania] = useState([]); //Combos roles perfil
+  //UseState para alert
+  const [listaErrores, setErrores] = useState([]); //Arreglo de los errores que se mostraran
+  const [openAlert, setopenAlert] = useState(false); //Bandera para mostrar y ocultar alert
+  const [tipoAlert, settipoAlert] = useState('error'); //tipo de error, warning o mensaje
+  const [tituloAlerta, settituloAlerta] = useState('Error'); //titulo
+
+  const handleOpenAlert = () => {
+    setopenAlert(!openAlert);
+  };
 
   const [datos, setDatos] = useState({
     id: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
     nombre: "",
     idCompania: "",
     fechaCumpleAnios: new Date("YYYY-MM-DD"),
+    email: "",
+    celular: ""
   });
 
   const IngresarValoresMemoria = (e) => {
@@ -78,7 +94,7 @@ const RegistrarCumple = (props) => {
   const changeCompania = (e) => {
     setDatos((anterior) => ({
       ...anterior,
-      idCompania: e.id,
+      idCompania: e,
     }));
   };
 
@@ -89,10 +105,87 @@ const RegistrarCumple = (props) => {
     }));
   };
 
-  const RegistrarUsuario = (e) => {
-    e.preventDefault();
+  const ValidarDatos = (e) => {
 
     console.log(datos);
+    if (datos.nombre === '' || datos.nombre === null) {
+      // alert("nombre");
+      // setErrores([
+      //   ...listaErrores,
+      //   { id: uuidv4(), descripcion: "Ingrese un nombre" }
+      // ]);
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese un nombre",
+      });
+    }
+
+    if (datos.idCompania === '' || datos.idCompania === null) {
+      // alert("compañia");
+      //setErrores([
+      //   ...listaErrores,
+      //   { id: uuidv4(), descripcion: "Ingrese una compañia" }
+      // ]);
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese una compañia",
+      });
+    }
+
+    if (datos.idCompania === 'Invalid Date') {
+      // alert("fecha");
+      // setErrores([
+      //   ...listaErrores,
+      //   { id: uuidv4(), descripcion: "Ingrese una Fecha" }
+      // ]);
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese una fecha",
+      });
+    }
+
+    if (datos.email === '') {
+      // setErrores([
+      //   ...listaErrores,
+      //   { id: uuidv4(), descripcion: "Ingrese un celular" }
+      // ]);
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese un email",
+      });
+    }
+    else {
+      if (!isEmail(datos.email)) {
+        listaErrores.push({
+          id: uuidv4(),
+          descripcion: "Ingrese un email valido",
+        });
+      }
+    }
+
+    if (datos.celular === '') {
+      //alert("celular");
+      // setErrores([
+      //   ...listaErrores,
+      //   { id: uuidv4(), descripcion: "Ingrese un celular" }
+      // ]);
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese un celular",
+      });
+    }
+
+  };
+
+  const RegistrarUsuario = (e) => {
+    e.preventDefault();
+    ValidarDatos(e);
+
+    if (listaErrores.length > 0) {
+      setopenAlert(true);
+      return;
+    }
+
 
     Registrar(datos).then((response) => {
       if (response.status === 200) {
@@ -116,6 +209,7 @@ const RegistrarCumple = (props) => {
             mensaje:
               "Errores al intentar guardar en : " +
               Object.keys(response.data.errors),
+
           },
         });
       }
@@ -134,17 +228,27 @@ const RegistrarCumple = (props) => {
           <form style={style.form}>
             <Grid container spacing={2}>
               <Grid item xs={12} md={12}>
-                <TextField
+                {/* <TextField
                   name="nombre"
                   variant="outlined"
                   fullWidth
                   label="Ingrese su nombre y apellidos"
                   onChange={IngresarValoresMemoria}
                   value={datos.nombre || ""}
-                ></TextField>
+                ></TextField> */}
+                <TextBox
+                  id="nombre"
+                  name="nombre"
+                  value={datos.nombre || ""}
+                  onChange={IngresarValoresMemoria}
+                  label="Nombre"
+                  required={true}
+                  requiredLabel={"Ingrese nombre"}
+                  uppercase={false}
+                ></TextBox>
               </Grid>
               <Grid item xs={12} md={6}>
-                <Autocomplete
+                {/* <Autocomplete
                   onChange={(event, newValue) => {
                     changeCompania(newValue);
                   }}
@@ -156,6 +260,18 @@ const RegistrarCumple = (props) => {
                   renderInput={(params) => (
                     <TextField {...params} label="Compañia" variant="outlined" />
                   )}
+                /> */}
+                <ListSelector
+                  dataSource={Compania}
+                  selectedValue={datos.idCompania}
+                  label="Compañia:"
+                  onChange={(event, newValue) => {
+                    changeCompania(newValue);
+                  }}
+                  idField="id"
+                  textField="valor"
+                  isRequired={true}
+                  requiredLabel="Ingrese una compañia"
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -169,24 +285,43 @@ const RegistrarCumple = (props) => {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-                <TextField
+                {/* <TextField
                   name="email"
                   variant="outlined"
                   fullWidth
                   label="Ingrese su Email"
                   onChange={IngresarValoresMemoria}
                   value={datos.email || ""}
-                ></TextField>
+                ></TextField> */}
+                <TextBox
+                  id="email"
+                  name="email"
+                  value={datos.email || ""}
+                  onChange={IngresarValoresMemoria}
+                  label="Email"
+                  required={true}
+                  requiredLabel={"Ingrese email"}
+                  validateEmail={true}
+                ></TextBox>
               </Grid>
               <Grid item xs={12} md={6}>
-                <TextField
+                {/* <TextField
                   name="celular"
                   variant="outlined"
                   fullWidth
                   label="Ingrese su celular"
                   onChange={IngresarValoresMemoria}
                   value={datos.celular || ""}
-                ></TextField>
+                ></TextField> */}
+                <TextBox
+                  id="celular"
+                  name="celular"
+                  value={datos.celular || ""}
+                  onChange={IngresarValoresMemoria}
+                  label="Celular"
+                  required={true}
+                  requiredLabel={"Ingrese celular"}
+                ></TextBox>
               </Grid>
 
             </Grid>
@@ -206,6 +341,15 @@ const RegistrarCumple = (props) => {
               </Grid>
             </Grid>
           </form>
+          <ControlAlert
+            errores={listaErrores}
+            setErrores={setErrores}
+            open={openAlert}
+            handleOpen={handleOpenAlert}
+            setopen={setopenAlert}
+            tipoAlerta={tipoAlert}
+            tituloAlerta={tituloAlerta}
+          />
         </div>
       </Container>
     </LocalizationProvider>

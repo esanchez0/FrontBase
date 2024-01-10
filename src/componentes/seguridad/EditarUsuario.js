@@ -64,7 +64,6 @@ const EditarUsuario = (props) => {
 
   const changeRol = (e) => {
     const nombreRol = roles.filter((item) => item.id === e);
-    //console.log(nombreRol[0].name);
     setrolNombre(nombreRol[0].name);
     // setestadoid(Id[0].estadoId);
     setDatos((anterior) => ({
@@ -90,8 +89,7 @@ const EditarUsuario = (props) => {
   const GuardarUsuario = (e) => {
     let mensajeFinal = "";
     e.preventDefault();
-    console.log(datos);
-
+    
     ActualizarUsuario(datos, dispatch).then((response) => {
       if (response.status === 200) {
         window.localStorage.setItem("token_seguridad", response.data.token); //Almacenando token

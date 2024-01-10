@@ -83,9 +83,7 @@ const EditarCumple = (props) => {
     };
 
     const RegistrarUsuario = (e) => {
-        e.preventDefault();
-
-        console.log(datos);
+        e.preventDefault();        
 
         Registrar(datos).then((response) => {
             if (response.status === 200) {

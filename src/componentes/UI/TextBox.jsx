@@ -4,6 +4,7 @@ import { makeStyles } from "@mui/styles";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { styled } from "@mui/system";
+import isEmail from 'validator/lib/isEmail';
 
 const useStyles = makeStyles((theme) => ({
   typography: {
@@ -22,11 +23,15 @@ export default function TextBox(props) {
   const [isDisabled, setDisabled] = useState(props.disabled || false);
   const [Type, setType] = useState(props.type || "text");
   const [status, setStatus] = useState(false);
-  const [isuppercase, setuppercase] = useState(props.uppercase || true);
+  const [isuppercase, setuppercase] = useState(props.uppercase || false);
+  //Para validar email
+  const [validateEmail, setvalidateEmail] = useState(props.validateEmail || false);
+
+
 
   const DivRequeridValidation = styled("div")({
     color: "white",
-    backgroundColor: "#f44336",
+    backgroundColor: "#FF7D33",
     padding: 10,
     marginbottom: 5,
     textAlign: "center",
@@ -75,11 +80,22 @@ export default function TextBox(props) {
       if (!e.target.value) {
         seterror(props.requiredLabel);
       } else {
-        seterror("");
+        if (validateEmail) {
+          if (!isEmail(e.target.value)) {
+            seterror("Ingrese un email valido");
+          }
+          else {
+            seterror("");
+          }
+        }
+        else {
+          seterror("");
+        }
       }
     } else {
       seterror("");
     }
+
     return error;
   };
 
@@ -106,7 +122,7 @@ export default function TextBox(props) {
           inputProps={{
             style: { textTransform: isuppercase ? "uppercase" : "" },
           }}
-          
+
         />
         {/* {(ctrlValue === '' && status) ? (<div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4">
         <p>{requiredLabel}</p>
