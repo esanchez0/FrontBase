@@ -9,6 +9,8 @@ import {
   AccordionSummary,
   AccordionDetails,
   Autocomplete,
+  Backdrop,
+  CircularProgress,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import style from "../Tool/style";
@@ -27,6 +29,7 @@ import TextBox from "../UI/TextBox";
 import { v4 as uuidv4 } from "uuid";
 import isEmail from "validator/lib/isEmail";
 import ListSelector from "../UI/ListSelector";
+import ControlBackDrop from "../UI/ControlBackDrop";
 
 const RegistrarCumple = (props) => {
   const [{ sesionUsuario }, dispatch] = useStateValue();
@@ -38,6 +41,7 @@ const RegistrarCumple = (props) => {
   const [openAlert, setopenAlert] = useState(false); //Bandera para mostrar y ocultar alert
   const [tipoAlert, settipoAlert] = useState("error"); //tipo de error, warning o mensaje
   const [tituloAlerta, settituloAlerta] = useState("No dejar campos vacios"); //titulo
+  const [openLoad, setopenLoad] = useState(false);
 
   const handleOpenAlert = () => {
     setopenAlert(!openAlert);
@@ -352,6 +356,7 @@ const RegistrarCumple = (props) => {
             tipoAlerta={tipoAlert}
             tituloAlerta={tituloAlerta}
           />
+         
         </div>
       </Container>
     </LocalizationProvider>

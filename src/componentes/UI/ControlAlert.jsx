@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { AlertTitle, Dialog, Alert } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import { useTheme } from '@mui/material/styles';
-import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from "@mui/material/styles";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
-{/* 
+{
+  /* 
 Ejemplo para implementar el control
 
 <ControlAlert
@@ -16,42 +17,45 @@ setopen={setopenAlert}              *Funcion para cambiar la bandera, abrir y ce
 tipoAlerta={tipoAlert}              *Tipo de alerta a mostrar(success,info,warning,error)
 tituloAlerta={tituloAlerta}         *Titulo que se muestra en la alerta
 
-/> */}
-
+/> */
+}
 
 const useStyles = makeStyles((theme) => ({
-    typography: {
-        padding: theme.spacing(2),
-    },
+  typography: {
+    padding: theme.spacing(2),
+  },
 }));
 
 export default function ControlAlert(props) {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
+  //   const matches = useMediaQuery('(min-width:600px)');
+  const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const handleClose = () => {
+    props.setopen(false);
+    props.setErrores([]);
+  };
 
-    const theme = useTheme();
-    const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+  return (
+    <Dialog
+      fullScreen={fullScreen}
+      open={props.open}
+      onClose={handleClose}
+      aria-labelledby="responsive-dialog-title"
+    >
+      <Alert
+        onClose={handleClose}
+        severity={props.tipoAlerta}
+        matches={matches}
+      >
+        <AlertTitle>{props.tituloAlerta}</AlertTitle>
 
-    const handleClose = () => {
-        props.setopen(false);
-        props.setErrores([]);
-    };
-
-    return (
-        <Dialog
-            fullScreen={fullScreen}
-            open={props.open}
-            onClose={handleClose}
-            aria-labelledby="responsive-dialog-title"
-        >
-            <Alert onClose={handleClose}  severity={props.tipoAlerta}>
-                <AlertTitle>{props.tituloAlerta}</AlertTitle>
-
-                <ul>
-                    {props.errores.map(error => (
-                        <li key={error.id}>{error.descripcion}</li>
-                    ))}
-                </ul>
-            </Alert>
-        </Dialog>
-    );
-
+        <ul>
+          {props.errores.map((error) => (
+            <li key={error.id}>{error.descripcion}</li>
+          ))}
+        </ul>
+      </Alert>
+    </Dialog>
+  );
 }
