@@ -16,16 +16,16 @@ import { Registrar, Obtener } from "../../actions/CumplesAction";
 import { catalogosComunes } from "../../actions/CatalogosAction";
 import { useStateValue } from "../../contexto/store";
 import Calender from "../UI/Calender";
-import { DatePicker, LocalizationProvider, esES } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import dayjs from 'dayjs';
+import { DatePicker, LocalizationProvider, esES } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs from "dayjs";
 // import es from 'date-fns/locale/es';
 // import { es } from 'date-fns/locale'
-import es from 'dayjs/locale/es';
+import es from "dayjs/locale/es";
 import ControlAlert from "../UI/ControlAlert";
 import TextBox from "../UI/TextBox";
-import { v4 as uuidv4 } from 'uuid';
-import isEmail from 'validator/lib/isEmail';
+import { v4 as uuidv4 } from "uuid";
+import isEmail from "validator/lib/isEmail";
 import ListSelector from "../UI/ListSelector";
 
 const RegistrarCumple = (props) => {
@@ -36,8 +36,8 @@ const RegistrarCumple = (props) => {
   //UseState para alert
   const [listaErrores, setErrores] = useState([]); //Arreglo de los errores que se mostraran
   const [openAlert, setopenAlert] = useState(false); //Bandera para mostrar y ocultar alert
-  const [tipoAlert, settipoAlert] = useState('error'); //tipo de error, warning o mensaje
-  const [tituloAlerta, settituloAlerta] = useState('Error'); //titulo
+  const [tipoAlert, settipoAlert] = useState("error"); //tipo de error, warning o mensaje
+  const [tituloAlerta, settituloAlerta] = useState("No dejar campos vacios"); //titulo
 
   const handleOpenAlert = () => {
     setopenAlert(!openAlert);
@@ -49,7 +49,7 @@ const RegistrarCumple = (props) => {
     idCompania: "",
     fechaCumpleAnios: new Date("YYYY-MM-DD"),
     email: "",
-    celular: ""
+    celular: "",
   });
 
   const IngresarValoresMemoria = (e) => {
@@ -67,7 +67,7 @@ const RegistrarCumple = (props) => {
       idCompania: "",
       fechaCumpleAnios: "",
       email: "",
-      celular: ""
+      celular: "",
     });
   };
 
@@ -85,10 +85,8 @@ const RegistrarCumple = (props) => {
   };
 
   const ConsultarCompania = async () => {
-
     const response = await catalogosComunes("Compañia");
     setCompania(response.data);
-
   };
 
   const changeCompania = (e) => {
@@ -101,14 +99,13 @@ const RegistrarCumple = (props) => {
   const changeCumpleAnios = (e) => {
     setDatos((anterior) => ({
       ...anterior,
-      fechaCumpleAnios: dayjs(e.$d).format('YYYY-MM-DD'),
+      fechaCumpleAnios: dayjs(e.$d).format("YYYY-MM-DD"),
     }));
   };
 
   const ValidarDatos = (e) => {
-
     console.log(datos);
-    if (datos.nombre === '' || datos.nombre === null) {
+    if (datos.nombre === "" || datos.nombre === null) {
       // alert("nombre");
       // setErrores([
       //   ...listaErrores,
@@ -120,7 +117,7 @@ const RegistrarCumple = (props) => {
       });
     }
 
-    if (datos.idCompania === '' || datos.idCompania === null) {
+    if (datos.idCompania === "" || datos.idCompania === null) {
       // alert("compañia");
       //setErrores([
       //   ...listaErrores,
@@ -132,7 +129,7 @@ const RegistrarCumple = (props) => {
       });
     }
 
-    if (datos.idCompania === 'Invalid Date') {
+    if (datos.idCompania === "Invalid Date") {
       // alert("fecha");
       // setErrores([
       //   ...listaErrores,
@@ -144,7 +141,7 @@ const RegistrarCumple = (props) => {
       });
     }
 
-    if (datos.email === '') {
+    if (datos.email === "") {
       // setErrores([
       //   ...listaErrores,
       //   { id: uuidv4(), descripcion: "Ingrese un celular" }
@@ -153,8 +150,7 @@ const RegistrarCumple = (props) => {
         id: uuidv4(),
         descripcion: "Ingrese un email",
       });
-    }
-    else {
+    } else {
       if (!isEmail(datos.email)) {
         listaErrores.push({
           id: uuidv4(),
@@ -163,7 +159,7 @@ const RegistrarCumple = (props) => {
       }
     }
 
-    if (datos.celular === '') {
+    if (datos.celular === "") {
       //alert("celular");
       // setErrores([
       //   ...listaErrores,
@@ -174,7 +170,6 @@ const RegistrarCumple = (props) => {
         descripcion: "Ingrese un celular",
       });
     }
-
   };
 
   const RegistrarUsuario = (e) => {
@@ -186,10 +181,8 @@ const RegistrarCumple = (props) => {
       return;
     }
 
-
     Registrar(datos).then((response) => {
       if (response.status === 200) {
-
         dispatch({
           type: "OPEN_SNACKBAR",
           openMensaje: {
@@ -209,7 +202,6 @@ const RegistrarCumple = (props) => {
             mensaje:
               "Errores al intentar guardar en : " +
               Object.keys(response.data.errors),
-
           },
         });
       }
@@ -244,7 +236,7 @@ const RegistrarCumple = (props) => {
                   label="Nombre"
                   required={true}
                   requiredLabel={"Ingrese nombre"}
-                  uppercase={false}
+                  uppercase={true}
                 ></TextBox>
               </Grid>
               <Grid item xs={12} md={6}>
@@ -276,12 +268,14 @@ const RegistrarCumple = (props) => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <DatePicker
-                  views={['year', 'month', 'day']}
+                  views={["year", "month", "day"]}
                   label="Mes, dia y año"
                   value={value}
                   onChange={(newValue) => changeCumpleAnios(newValue)}
                   disableFuture={true}
-                  renderInput={(params) => <TextField {...params} helperText={null} />}
+                  renderInput={(params) => (
+                    <TextField {...params} helperText={null} />
+                  )}
                 />
               </Grid>
               <Grid item xs={12} md={6}>
@@ -313,6 +307,15 @@ const RegistrarCumple = (props) => {
                   onChange={IngresarValoresMemoria}
                   value={datos.celular || ""}
                 ></TextField> */}
+                {/* <TextBox
+                  id="celular"
+                  name="celular"
+                  value={datos.celular || ""}
+                  onChange={IngresarValoresMemoria}
+                  label="Celular"
+                  required={true}
+                  requiredLabel={"Ingrese celular"}
+                ></TextBox> */}
                 <TextBox
                   id="celular"
                   name="celular"
@@ -323,7 +326,6 @@ const RegistrarCumple = (props) => {
                   requiredLabel={"Ingrese celular"}
                 ></TextBox>
               </Grid>
-
             </Grid>
             <Grid container justifyContent="center">
               <Grid item xs={12} md={6}>
