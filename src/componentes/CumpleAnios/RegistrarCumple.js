@@ -121,35 +121,21 @@ const RegistrarCumple = (props) => {
       });
     }
 
-    if (datos.idCompania === "" || datos.idCompania === null) {
-      // alert("compañia");
-      //setErrores([
-      //   ...listaErrores,
-      //   { id: uuidv4(), descripcion: "Ingrese una compañia" }
-      // ]);
+    if (datos.idCompania === "" || datos.idCompania === null) {      
       listaErrores.push({
         id: uuidv4(),
         descripcion: "Ingrese una compañia",
       });
     }
 
-    if (datos.idCompania === "Invalid Date") {
-      // alert("fecha");
-      // setErrores([
-      //   ...listaErrores,
-      //   { id: uuidv4(), descripcion: "Ingrese una Fecha" }
-      // ]);
+    if (datos.idCompania === "Invalid Date") {     
       listaErrores.push({
         id: uuidv4(),
         descripcion: "Ingrese una fecha",
       });
     }
 
-    if (datos.email === "") {
-      // setErrores([
-      //   ...listaErrores,
-      //   { id: uuidv4(), descripcion: "Ingrese un celular" }
-      // ]);
+    if (datos.email === "") {    
       listaErrores.push({
         id: uuidv4(),
         descripcion: "Ingrese un email",
@@ -163,12 +149,7 @@ const RegistrarCumple = (props) => {
       }
     }
 
-    if (datos.celular === "") {
-      //alert("celular");
-      // setErrores([
-      //   ...listaErrores,
-      //   { id: uuidv4(), descripcion: "Ingrese un celular" }
-      // ]);
+    if (datos.celular === "") {     
       listaErrores.push({
         id: uuidv4(),
         descripcion: "Ingrese un celular",
@@ -178,6 +159,7 @@ const RegistrarCumple = (props) => {
 
   const RegistrarUsuario = (e) => {
     e.preventDefault();
+    
     ValidarDatos(e);
 
     if (listaErrores.length > 0) {
