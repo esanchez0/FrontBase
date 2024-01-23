@@ -32,6 +32,7 @@ import IconButton from "@mui/material/IconButton";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import { styled } from "@mui/system";
 
 const GuardarUsuario = (props) => {
   const [{ sesionUsuario }, dispatch] = useStateValue();
@@ -154,6 +155,20 @@ const GuardarUsuario = (props) => {
       });
     }
 
+    if (datos.password === "") {
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese una contraseña",
+      });
+    }
+
+    if (datos.confirmacionpassword === "") {
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese la confirmacion de su contraseña",
+      });
+    }
+
     if (datos.idRol === "" || datos.idRol === null) {
       listaErrores.push({
         id: uuidv4(),
@@ -209,22 +224,63 @@ const GuardarUsuario = (props) => {
     }));
   };
 
-  const ValidarPass = (e) => {
-    e.preventDefault();
-    setpasswordIgual(datos.password);
-    //alert("form", datos.password);
-    // alert("form");
-    // if (e.target.value === datos.password) {
-    //   setpasswordIgual(true);
-    // }
-  };
 
+
+  //Para mostrar o no la contraseña
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+  //Para mostrar o no la contraseña confirm
+  const [showPasswordConfimr, setShowPasswordConfimr] = useState(false);
+
+  const handleClickShowPasswordConfimr = () =>
+    setShowPasswordConfimr((show) => !show);
+
+  const handleMouseDownPasswordConfimr = (event) => {
+    event.preventDefault();
+  };
+
+  const [error, seterror] = useState("");
+  const [errorConfirm, seterrorConfirm] = useState("");
+
+  const DivRequeridValidation = styled("div")({
+    color: "white",
+    backgroundColor: "#FF7D33",
+    padding: 10,
+    marginbottom: 5,
+    textAlign: "center",
+    verticalAlign: "middle",
+    font: "text-danger",
+  });
+
+  const Validate = (e) => {
+    e.preventDefault();
+
+    if (!e.target.value) {
+      seterror("Ingresar una contraseña");
+    } else {
+      seterror("");
+    }
+
+    return error;
+  };
+
+  const ValidateConfirm = (e) => {
+    e.preventDefault();
+
+    if (!e.target.value) {
+      seterrorConfirm("Ingresar una contraseña");
+    } else {
+      if (e.target.value !== datos.password) {
+        seterrorConfirm("Las contraseñas son diferentes");
+      } else seterrorConfirm("");
+    }
+
+    return error;
   };
 
   return (
@@ -299,13 +355,14 @@ const GuardarUsuario = (props) => {
             </Grid>
 
             <Grid item xs={12} md={6}>
-              {/* <TextField
+              <TextField
                 name="password"
                 // type="password"
                 variant="outlined"
                 fullWidth
                 label="Ingrese su password"
                 onChange={IngresarValoresMemoria}
+                onBlur={Validate}
                 value={datos.password || ""}
                 type={showPassword ? "text" : "password"}
                 InputProps={{
@@ -322,47 +379,62 @@ const GuardarUsuario = (props) => {
                     </InputAdornment>
                   ),
                 }}
-              ></TextField> */}
-              <TextBoxPassword
+              ></TextField>
+              {error ? (
+                <DivRequeridValidation>
+                  {error && <span className="err">{error}</span>}
+                </DivRequeridValidation>
+              ) : null}
+              {/* <TextBoxPassword
                 name="password"
                 label="Ingrese su password"
                 value={datos.password}
                 onChange={IngresarValoresMemoria}
-              ></TextBoxPassword>
+              ></TextBoxPassword> */}
             </Grid>
 
             <Grid item xs={12} md={6}>
-              {/* <TextField
+              <TextField
                 name="confirmacionpassword"
-                type={showPassword ? "text" : "password"}
+                type={showPasswordConfimr ? "text" : "password"}
                 variant="outlined"
                 fullWidth
                 label="Ingrese su confirmacion password"
                 onChange={IngresarValoresMemoria}
+                onBlur={ValidateConfirm}
                 value={datos.confirmacionpassword || ""}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
                       <IconButton
                         aria-label="toggle password visibility"
-                        onClick={handleClickShowPassword}
-                        onMouseDown={handleMouseDownPassword}
+                        onClick={handleClickShowPasswordConfimr}
+                        onMouseDown={handleMouseDownPasswordConfimr}
                         edge="end"
                       >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                        {showPasswordConfimr ? (
+                          <VisibilityOff />
+                        ) : (
+                          <Visibility />
+                        )}
                       </IconButton>
                     </InputAdornment>
                   ),
                 }}
-              ></TextField> */}
-              <TextBoxPassword
+              ></TextField>
+              {errorConfirm ? (
+                <DivRequeridValidation>
+                  {errorConfirm && <span className="err">{errorConfirm}</span>}
+                </DivRequeridValidation>
+              ) : null}
+              {/* <TextBoxPassword
                 name="confirmacionpassword"
                 label="Ingrese su password"
                 value={datos.confirmacionpassword}
                 onChange={IngresarValoresMemoria}
                 onBlur={ValidarPass}
                 passwordOriginal={passwordIgual}
-              ></TextBoxPassword>
+              ></TextBoxPassword> */}
             </Grid>
             <Grid item xs={12} md={6}>
               {/* <Autocomplete
