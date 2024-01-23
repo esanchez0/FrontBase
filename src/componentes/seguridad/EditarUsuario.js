@@ -1,19 +1,27 @@
-import {  useState, useEffect } from "react";
-import { Container, Typography, Grid, TextField, Button } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Container, Typography, Grid, Button } from "@mui/material";
 import style from "../Tool/style";
-import {
-  RegistrarUsuario as GuardarUsuario,
-  obtenerRoles,
-  ObtenerUsuarios,
-  ActualizarUsuario,
-} from "../../actions/UsuarioAction";
+import { obtenerRoles, ActualizarUsuario } from "../../actions/UsuarioAction";
+import { v4 as uuidv4 } from "uuid";
+import isEmail from "validator/lib/isEmail";
 import ListSelector from "../UI/ListSelector";
 import { useStateValue } from "../../contexto/store";
 import TextBox from "../UI/TextBox";
+import ControlAlert from "../UI/ControlAlert";
 
 const EditarUsuario = (props) => {
-  const [{ sesionUsuario, openSnackbar }, dispatch] = useStateValue(); 
+  const [{ sesionUsuario, openSnackbar }, dispatch] = useStateValue();
   const [userNameOlds, setuserNameOld] = useState("");
+  //UseState para alert
+  const [listaErrores, setErrores] = useState([]); //Arreglo de los errores que se mostraran
+  const [openAlert, setopenAlert] = useState(false); //Bandera para mostrar y ocultar alert
+  const [tipoAlert, settipoAlert] = useState("error"); //tipo de error, warning o mensaje
+  const [tituloAlerta, settituloAlerta] = useState("No dejar campos vacios"); //titulo
+  const [openLoad, setopenLoad] = useState(false);
+
+  const handleOpenAlert = () => {
+    setopenAlert(!openAlert);
+  };
   const [datos, setDatos] = useState({
     nombreCompleto: "",
     email: "",
@@ -45,22 +53,18 @@ const EditarUsuario = (props) => {
     const consultarRoles = async () => {
       const response = await obtenerRoles();
       setRoles(response.data);
-
     };
-   consultarRoles();
+    consultarRoles();
     setDatos(props.AtributoData);
     setrolNombre(props.AtributoData.perfil);
     setuserNameOld(props.AtributoData.userName);
     setIniciaApp(false);
   }, [iniciaApp]);
 
-
-
   const [open, setopen] = useState(false);
   const handleOpen = () => {
     setopen(!open);
   };
-
 
   const changeRol = (e) => {
     const nombreRol = roles.filter((item) => item.id === e);
@@ -72,7 +76,6 @@ const EditarUsuario = (props) => {
       nombreRol: nombreRol[0].name,
     }));
   };
-
 
   const LimpiarCajas = () => {
     setDatos({
@@ -86,10 +89,60 @@ const EditarUsuario = (props) => {
     });
   };
 
+  const ValidarDatos = (e) => {
+    console.log(datos);
+    if (datos.nombreCompleto === "" || datos.nombreCompleto === null) {
+      // alert("nombre");
+      // setErrores([
+      //   ...listaErrores,
+      //   { id: uuidv4(), descripcion: "Ingrese un nombre" }
+      // ]);
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese un nombre",
+      });
+    }
+
+    if (datos.email === "") {
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese un email",
+      });
+    } else {
+      if (!isEmail(datos.email)) {
+        listaErrores.push({
+          id: uuidv4(),
+          descripcion: "Ingrese un email valido",
+        });
+      }
+    }
+
+    if (datos.userName === "") {
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese un username",
+      });
+    }
+   
+    if (datos.idRol === "" || datos.idRol === null) {
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese un rol",
+      });
+    }
+  };
+
   const GuardarUsuario = (e) => {
     let mensajeFinal = "";
     e.preventDefault();
-    
+
+    ValidarDatos(e);
+
+    if (listaErrores.length > 0) {
+      setopenAlert(true);
+      return;
+    }
+
     ActualizarUsuario(datos, dispatch).then((response) => {
       if (response.status === 200) {
         window.localStorage.setItem("token_seguridad", response.data.token); //Almacenando token
@@ -166,7 +219,8 @@ const EditarUsuario = (props) => {
                 onChange={IngresarValoresEnMemoria}
                 label="Nombre"
                 required={true}
-                requiredLabel={"Ingrese Informacion"}
+                requiredLabel={"Ingrese nombre"}
+                uppercase={true}
               ></TextBox>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -185,7 +239,8 @@ const EditarUsuario = (props) => {
                 onChange={IngresarValoresEnMemoria}
                 label="Email"
                 required={true}
-                requiredLabel={"Ingrese Informacion"}
+                requiredLabel={"Ingrese email"}
+                validateEmail={true}
               ></TextBox>
             </Grid>
             <Grid item xs={12} md={6}>
@@ -204,11 +259,10 @@ const EditarUsuario = (props) => {
                 onChange={IngresarValoresEnMemoria}
                 label="User Name"
                 required={true}
-                requiredLabel={"Ingrese Informacion"}
+                requiredLabel={"Ingrese Username"}
+                uppercase={true}
               ></TextBox>
-            </Grid>        
-
-  
+            </Grid>
           </Grid>
           <Grid container justifyContent="center">
             <Grid item xs={12} md={6}>
@@ -226,6 +280,15 @@ const EditarUsuario = (props) => {
             </Grid>
           </Grid>
         </form>
+        <ControlAlert
+          errores={listaErrores}
+          setErrores={setErrores}
+          open={openAlert}
+          handleOpen={handleOpenAlert}
+          setopen={setopenAlert}
+          tipoAlerta={tipoAlert}
+          tituloAlerta={tituloAlerta}
+        />
       </div>
     </Container>
   );

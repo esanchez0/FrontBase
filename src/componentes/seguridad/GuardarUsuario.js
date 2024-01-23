@@ -50,9 +50,6 @@ const GuardarUsuario = (props) => {
   const [tipoAlert, settipoAlert] = useState("error"); //tipo de error, warning o mensaje
   const [tituloAlerta, settituloAlerta] = useState("No dejar campos vacios"); //titulo
   const [openLoad, setopenLoad] = useState(false);
-  //Para el control de password
-  const [passwordIgual, setpasswordIgual] = useState("");
-
   const handleOpenAlert = () => {
     setopenAlert(!openAlert);
   };
