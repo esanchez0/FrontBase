@@ -56,6 +56,8 @@ const GuardarUsuario = (props) => {
 
   const [datos, setDatos] = useState({
     nombreCompleto: "",
+    apellidoPaterno: "",
+    apellidoMaterno: "",
     email: "",
     password: "",
     username: "",
@@ -131,6 +133,13 @@ const GuardarUsuario = (props) => {
       });
     }
 
+    if (datos.apellidoPaterno === "" || datos.apellidoPaterno === null) {
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese un Apellido Paterno",
+      });
+    }
+
     if (datos.email === "") {
       listaErrores.push({
         id: uuidv4(),
@@ -164,6 +173,15 @@ const GuardarUsuario = (props) => {
         id: uuidv4(),
         descripcion: "Ingrese la confirmacion de su contraseña",
       });
+    }
+
+    if (datos.password !== "" && datos.confirmacionpassword !== "") {
+      if (datos.password !== datos.confirmacionpassword) {
+        listaErrores.push({
+          id: uuidv4(),
+          descripcion: "Las contraseñas son diferentes",
+        });
+      }
     }
 
     if (datos.idRol === "" || datos.idRol === null) {
@@ -220,8 +238,6 @@ const GuardarUsuario = (props) => {
       [name]: value,
     }));
   };
-
-
 
   //Para mostrar o no la contraseña
   const [showPassword, setShowPassword] = useState(false);
@@ -305,6 +321,29 @@ const GuardarUsuario = (props) => {
                 label="Nombre completo"
                 required={true}
                 requiredLabel={"Ingrese nombre"}
+                uppercase={true}
+              ></TextBox>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <TextBox
+                id="apellidoPaterno"
+                name="apellidoPaterno"
+                value={datos.apellidoPaterno || ""}
+                onChange={IngresarValoresMemoria}
+                label="Apellido Paterno"
+                required={true}
+                requiredLabel={"Ingrese Apellido Paterno"}
+                uppercase={true}
+              ></TextBox>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextBox
+                id="apellidoMaterno"
+                name="apellidoMaterno"
+                value={datos.apellidoMaterno || ""}
+                onChange={IngresarValoresMemoria}
+                label="Apellido Materno"
                 uppercase={true}
               ></TextBox>
             </Grid>

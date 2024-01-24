@@ -239,6 +239,22 @@ const RegistrarUsuarioNueva = () => {
                 }),
             },
             {
+                accessorKey: 'apellidoPaterno',
+                header: 'Apellido Paterno',
+                size: 140,
+                muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+                    ...getCommonEditTextFieldProps(cell),
+                }),
+            },
+            {
+                accessorKey: 'apellidoMaterno',
+                header: 'Apellido Materno',
+                size: 140,
+                muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+                    ...getCommonEditTextFieldProps(cell),
+                }),
+            },
+            {
                 accessorKey: 'userName',
                 header: 'Nombre de Usuario',
                 size: 140,

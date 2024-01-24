@@ -24,6 +24,8 @@ const EditarUsuario = (props) => {
   };
   const [datos, setDatos] = useState({
     nombreCompleto: "",
+    apellidoPaterno: "",
+    apellidoMaterno: "",
     email: "",
     password: "",
     username: "",
@@ -103,6 +105,13 @@ const EditarUsuario = (props) => {
       });
     }
 
+    if (datos.apellidoPaterno === "" || datos.apellidoPaterno === null) {
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese un Apellido Paterno",
+      });
+    }
+
     if (datos.email === "") {
       listaErrores.push({
         id: uuidv4(),
@@ -123,7 +132,7 @@ const EditarUsuario = (props) => {
         descripcion: "Ingrese un username",
       });
     }
-   
+
     if (datos.idRol === "" || datos.idRol === null) {
       listaErrores.push({
         id: uuidv4(),
@@ -203,7 +212,7 @@ const EditarUsuario = (props) => {
                 textField="name"
               />
             </Grid>
-            <Grid item xs={12} md={6}>
+            <Grid item xs={12} md={12}>
               {/* <TextField
                 name="nombreCompleto"
                 variant="outlined"
@@ -220,6 +229,28 @@ const EditarUsuario = (props) => {
                 label="Nombre"
                 required={true}
                 requiredLabel={"Ingrese nombre"}
+                uppercase={true}
+              ></TextBox>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextBox
+                id="apellidoPaterno"
+                name="apellidoPaterno"
+                value={datos.apellidoPaterno || ""}
+                onChange={IngresarValoresEnMemoria}
+                label="Apellido Paterno"
+                required={true}
+                requiredLabel={"Ingrese Apellido Paterno"}
+                uppercase={true}
+              ></TextBox>
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <TextBox
+                id="apellidoMaterno"
+                name="apellidoMaterno"
+                value={datos.apellidoMaterno || ""}
+                onChange={IngresarValoresEnMemoria}
+                label="Apellido Materno"              
                 uppercase={true}
               ></TextBox>
             </Grid>

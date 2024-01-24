@@ -15,7 +15,7 @@ export const MenuIzquierda = ({ classes }) => {
           <i className="material-icons">account_box</i>
           <ListItemText
             classes={{ primary: classes.listItemText }}
-            primary="Registrar Nuevo Usuario"
+            primary="Usuarios"
           />
         </ListItem>
         <ListItem to="/rol" component={NavLink}>
@@ -64,7 +64,7 @@ export const MenuIzquierda = ({ classes }) => {
           <i className="material-icons">cake</i>
           <ListItemText
             classes={{ primary: classes.listItemText }}
-            primary="Cumple Años"
+            primary="CumpleAños"
           />
         </ListItem>
       </List>
