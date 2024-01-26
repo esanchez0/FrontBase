@@ -14,6 +14,7 @@ import Consigna from "./componentes/Consignas/NuevoConsigna"
 import Incidencia from "./componentes/Incidencias/NuevaIncidencia"
 import RegistrarUsuarioNueva from "./componentes/seguridad/RegistrarUsuarioNueva";
 import Cumples from "./componentes/CumpleAnios/Cumples";
+import IncidenciasKOCPIB from "./componentes/IncidenciasKocPIB/IncidenciasKOCPIB";
 
 function App() {
   const [{ sesionUsuario, openSnackbar }, dispatch] = useStateValue();
@@ -69,6 +70,7 @@ function App() {
                 <Route path="/Consigna" element={<Consigna></Consigna>}></Route>
                 <Route path="/Incidencia" element={<Incidencia></Incidencia>}></Route>
                 <Route exact path="/cumple" element={<Cumples></Cumples>}></Route>
+                <Route exact path="/KocPIB" element={<IncidenciasKOCPIB></IncidenciasKOCPIB>}></Route>
 
               </Route>
             </Routes>

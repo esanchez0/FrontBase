@@ -58,6 +58,13 @@ export const MenuIzquierda = ({ classes }) => {
             primary="Incidencia"
           />
         </ListItem>
+        <ListItem to="/KocPIB" component={NavLink}>
+          <i className="material-icons">build</i>
+          <ListItemText
+            classes={{ primary: classes.listItemText }}
+            primary="KOC PIB"
+          />
+        </ListItem>
       </List>
       <List>
         <ListItem to="/cumple" component={NavLink}>
