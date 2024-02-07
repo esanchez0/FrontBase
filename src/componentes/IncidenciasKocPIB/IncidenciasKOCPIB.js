@@ -17,7 +17,7 @@ import {
 import { Delete, Edit } from "@mui/icons-material";
 import {
   Obtener as ObtenerCumples,
-  Eliminar,
+  Eliminar as EliminarIncidenciaKocPIB,
 } from "../../actions/IncidenciasKocPIBAction";
 import ModalCrud from "./ModalCrud";
 import { MRT_Localization_ES } from "material-react-table/locales/es";
@@ -112,8 +112,8 @@ const IncidenciasKOCPIB = () => {
   );
 
   const EliminarRegistro = () => {
-    // alert(IdCumple);
-    Eliminar(IdCumple).then((response) => {
+   
+    EliminarIncidenciaKocPIB(IdCumple).then((response) => {
 
       if (response.status === 200) {
 
@@ -121,7 +121,7 @@ const IncidenciasKOCPIB = () => {
           type: "OPEN_SNACKBAR",
           openMensaje: {
             open: true,
-            mensaje: "Se elimino exitosamente el Cumple años.",
+            mensaje: "Se elimino exitosamente el registro.",
           },
         });
         ConsultarIncidencias();

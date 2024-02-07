@@ -2,15 +2,7 @@ import { React } from "react";
 import { Modal, Box } from "@mui/material";
 import RegistrarEditar from "./RegistrarEditar";
 
-
-
-const ModalCrud = ({
-  open,
-  setopen,
-  Information,
-  Actualizar,
-  Accion,
-}) => {
+const ModalCrud = ({ open, setopen, Information, Actualizar, Accion }) => {
   const handleOpen = () => {
     setopen(true);
   };
@@ -29,17 +21,17 @@ const ModalCrud = ({
         AtributoAccion={Accion}
       />
     );
-  }
-//   else if (Accion === "Edicion") {  
-//     componenet = (
-//       <EditarCumple
-//         AtributoData={Information}
-//         AtributoCerrarModal={cerrarModal}
-//         AtributoActualizarUsuarios={Actualizar}
-//         AtributoAccion={Accion}
-//       />
-//     );
-//   }
+  } 
+  else if (Accion === "Edicion") {
+    componenet = (
+      <RegistrarEditar
+        AtributoData={Information}
+        AtributoCerrarModal={cerrarModal}
+        AtributoActualizarUsuarios={Actualizar}
+        AtributoAccion={Accion}
+      />
+    );
+  } 
   else {
     console.log("otra");
   }

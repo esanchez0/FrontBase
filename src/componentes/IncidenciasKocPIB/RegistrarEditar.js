@@ -1,7 +1,16 @@
 import { useState, useEffect } from "react";
 import { Container, Typography, Grid, TextField, Button } from "@mui/material";
 import style from "../Tool/style";
-import { Registrar as RegistrarActualizarIncidencia, Obtener } from "../../actions/IncidenciasKocPIBAction";
+import {
+  Registrar as RegistrarActualizarIncidencia,
+  Obtener,
+} from "../../actions/IncidenciasKocPIBAction";
+import {
+  registrarUsuario as Guardar,
+  ObtenerUsuarios as ConsultarUsuariosBD,
+  obtenerRoles,
+  Eliminar,
+} from "../../actions/UsuarioAction";
 import { catalogosComunes } from "../../actions/CatalogosAction";
 import { useStateValue } from "../../contexto/store";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
@@ -18,7 +27,10 @@ const RegistrarCumple = (props) => {
   const [{ sesionUsuario }, dispatch] = useStateValue();
   const [ObtenerCumples, setObtenerCumples] = useState([]); //Obtiene los usuarios para cargar grid
   const [iniciaApp, setIniciaApp] = useState(true);
-  const [Compania, setCompania] = useState([]); //Combos roles perfil
+  const [Empresa, setEmpresa] = useState([]); //Combos
+  const [TipoIncidente, setTipoIncidente] = useState([]); //Combos
+  const [ObtenerUsuarios, setObtenerUsuarios] = useState([]); //Combos
+
   //UseState para alert
   const [listaErrores, setErrores] = useState([]); //Arreglo de los errores que se mostraran
   const [openAlert, setopenAlert] = useState(false); //Bandera para mostrar y ocultar alert
@@ -56,11 +68,11 @@ const RegistrarCumple = (props) => {
     setDatos({
       incidenciaKOCPBIId: "",
       fechaYHora: "",
-      tipoIncidencia: "",
       nombre: "",
       empresa: "",
+      tipoIncidencia: "",
       asunto: "",
-      descripcion: "",
+      // descripcion: "",
       conclusion: "",
       seReportoA: "",
       analista: "",
@@ -69,9 +81,15 @@ const RegistrarCumple = (props) => {
 
   //Eventos de estado
   useEffect(() => {
-    // ConsultarCumples();
-    ConsultarCompania();
+    ConsultarTipoincidente();
+    ConsultarEmpresas();
+    Consultarusuarios();
     setIniciaApp(false);
+    if (props.AtributoAccion === "Edicion") {
+      setAccion("Editar registro");
+      setDatos(props.AtributoData);
+      console.log(props.AtributoData);
+    }
   }, [iniciaApp]);
 
   //------------  Solicitudes BD  -------------
@@ -80,15 +98,47 @@ const RegistrarCumple = (props) => {
     setObtenerCumples(response.data);
   };
 
-  const ConsultarCompania = async () => {
-    const response = await catalogosComunes("Compañia");
-    setCompania(response.data);
+  const ConsultarEmpresas = async () => {
+    const response = await catalogosComunes("Empresa Visita");
+    setEmpresa(response.data);
   };
 
-  const changeCompania = (e) => {
+  const Consultarusuarios = async () => {
+    const response = await ConsultarUsuariosBD();
+    setObtenerUsuarios(response.data);
+    console.log(response.data);
+  };
+
+  const ConsultarTipoincidente = async () => {
+    const response = await catalogosComunes("Tipo incidente");
+    setTipoIncidente(response.data);
+  };
+
+  const changeEmpresa = (e) => {
     setDatos((anterior) => ({
       ...anterior,
-      idCompania: e,
+      empresa: e,
+    }));
+  };
+
+  const changeTipoIncidencia = (e) => {
+    setDatos((anterior) => ({
+      ...anterior,
+      tipoIncidencia: e,
+    }));
+  };
+
+  const changeAquienReporta = (e) => {
+    setDatos((anterior) => ({
+      ...anterior,
+      seReportoA: e,
+    }));
+  };
+
+  const changeAnalista = (e) => {
+    setDatos((anterior) => ({
+      ...anterior,
+      analista: e,
     }));
   };
 
@@ -113,38 +163,45 @@ const RegistrarCumple = (props) => {
       });
     }
 
-    if (datos.idCompania === "" || datos.idCompania === null) {
+    if (datos.empresa === "" || datos.empresa === null) {
       listaErrores.push({
         id: uuidv4(),
-        descripcion: "Ingrese una compañia",
+        descripcion: "Ingrese una empresa",
       });
     }
 
-    if (datos.idCompania === "Invalid Date") {
+    if (datos.tipoIncidencia === "" || datos.tipoIncidencia === null) {
       listaErrores.push({
         id: uuidv4(),
-        descripcion: "Ingrese una fecha",
+        descripcion: "Ingrese una tipoIncidencia",
       });
     }
 
-    if (datos.email === "") {
+    if (datos.asunto === "" || datos.asunto === null) {
       listaErrores.push({
         id: uuidv4(),
-        descripcion: "Ingrese un email",
+        descripcion: "Ingrese una asunto",
       });
-    } else {
-      if (!isEmail(datos.email)) {
-        listaErrores.push({
-          id: uuidv4(),
-          descripcion: "Ingrese un email valido",
-        });
-      }
     }
 
-    if (datos.celular === "") {
+    if (datos.conclusion === "" || datos.conclusion === null) {
       listaErrores.push({
         id: uuidv4(),
-        descripcion: "Ingrese un celular",
+        descripcion: "Ingrese una conclusion",
+      });
+    }
+
+    if (datos.seReportoA === "" || datos.seReportoA === null) {
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese una persona a quien reporta",
+      });
+    }
+
+    if (datos.analista === "" || datos.analista === null) {
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingrese una persona analista",
       });
     }
   };
@@ -209,21 +266,7 @@ const RegistrarCumple = (props) => {
                   )}
                 />
               </Grid>
-              <Grid item xs={12} md={6}>
-                <ListSelector
-                  dataSource={Compania}
-                  selectedValue={datos.idTipoIncidencia}
-                  label="Tipo Incidencia:"
-                  onChange={(event, newValue) => {
-                    changeCompania(newValue);
-                  }}
-                  idField="id"
-                  textField="valor"
-                  isRequired={true}
-                  requiredLabel="Ingrese tipo incidencia"
-                />
-              </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={12}>
                 <TextBox
                   id="nombre"
                   name="nombre"
@@ -235,13 +278,14 @@ const RegistrarCumple = (props) => {
                   validateEmail={false}
                 ></TextBox>
               </Grid>
+
               <Grid item xs={12} md={6}>
                 <ListSelector
-                  dataSource={Compania}
+                  dataSource={Empresa}
                   selectedValue={datos.idEmpresa}
                   label="Empresa:"
                   onChange={(event, newValue) => {
-                    changeCompania(newValue);
+                    changeEmpresa(newValue);
                   }}
                   idField="id"
                   textField="valor"
@@ -250,7 +294,21 @@ const RegistrarCumple = (props) => {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
-              <TextBox
+                <ListSelector
+                  dataSource={TipoIncidente}
+                  selectedValue={datos.idTipoIncidencia}
+                  label="Tipo Incidencia:"
+                  onChange={(event, newValue) => {
+                    changeTipoIncidencia(newValue);
+                  }}
+                  idField="id"
+                  textField="valor"
+                  isRequired={true}
+                  requiredLabel="Ingrese tipo incidencia"
+                />
+              </Grid>
+              <Grid item xs={12} md={12}>
+                <TextBox
                   id="asunto"
                   name="asunto"
                   value={datos.asunto || ""}
@@ -261,19 +319,7 @@ const RegistrarCumple = (props) => {
                   validateEmail={false}
                 ></TextBox>
               </Grid>
-              <Grid item xs={12} md={6}>
-                <TextBox
-                  id="descripcion"
-                  name="descripcion"
-                  value={datos.descripcion || ""}
-                  onChange={IngresarValoresMemoria}
-                  label="Descripcion"
-                  required={true}
-                  requiredLabel={"Ingrese descripcion"}
-                  validateEmail={false}
-                ></TextBox>
-              </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={12}>
                 <TextBox
                   id="conclusion"
                   name="conclusion"
@@ -287,28 +333,28 @@ const RegistrarCumple = (props) => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <ListSelector
-                  dataSource={Compania}
+                  dataSource={ObtenerUsuarios}
                   selectedValue={datos.idSeReportoA}
                   label="Se reporta a:"
                   onChange={(event, newValue) => {
-                    changeCompania(newValue);
+                    changeAquienReporta(newValue);
                   }}
-                  idField="id"
-                  textField="valor"
+                  idField="idUsuario"
+                  textField="nombreCompleto"
                   isRequired={true}
                   requiredLabel="A quien se reporto?"
                 />
               </Grid>
               <Grid item xs={12} md={6}>
                 <ListSelector
-                  dataSource={Compania}
+                  dataSource={ObtenerUsuarios}
                   selectedValue={datos.idAnalista}
                   label="Analista:"
                   onChange={(event, newValue) => {
-                    changeCompania(newValue);
+                    changeAnalista(newValue);
                   }}
-                  idField="id"
-                  textField="valor"
+                  idField="idUsuario"
+                  textField="nombreCompleto"
                   isRequired={true}
                   requiredLabel="Ingrese analista"
                 />
