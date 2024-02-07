@@ -159,6 +159,14 @@ const IncidenciasKOCPIB = () => {
         }),
       },
       {
+        accessorKey: "tipoIncidenciaKOCPIB",
+        header: "Tipo Incidencia KOC PIB",
+        size: 140,
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
         accessorKey: "tipoIncidencia",
         header: "Tipo Incidencia",
         size: 140,
@@ -205,10 +213,10 @@ const IncidenciasKOCPIB = () => {
         }),
       },
     
-      {
-        accessorKey: "descripcion",
-        header: "Descripcion",
-      },
+      // {
+      //   accessorKey: "descripcion",
+      //   header: "Descripcion",
+      // },
       {
         accessorKey: "conclusion",
         header: "Conclusion",

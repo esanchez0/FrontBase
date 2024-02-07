@@ -30,6 +30,7 @@ const RegistrarCumple = (props) => {
   const [Empresa, setEmpresa] = useState([]); //Combos
   const [TipoIncidente, setTipoIncidente] = useState([]); //Combos
   const [ObtenerUsuarios, setObtenerUsuarios] = useState([]); //Combos
+  const [ObtenerKOCPIB, setObtenerKOCPIB] = useState([]); //Combos
 
   //UseState para alert
   const [listaErrores, setErrores] = useState([]); //Arreglo de los errores que se mostraran
@@ -54,6 +55,7 @@ const RegistrarCumple = (props) => {
     conclusion: "",
     seReportoA: "",
     analista: "",
+    tipoIncidenciaKOCPIB: "",
   });
 
   const IngresarValoresMemoria = (e) => {
@@ -84,6 +86,7 @@ const RegistrarCumple = (props) => {
     ConsultarTipoincidente();
     ConsultarEmpresas();
     Consultarusuarios();
+    ConsultarKOCPIB();
     setIniciaApp(false);
     if (props.AtributoAccion === "Edicion") {
       setAccion("Editar registro");
@@ -101,6 +104,11 @@ const RegistrarCumple = (props) => {
   const ConsultarEmpresas = async () => {
     const response = await catalogosComunes("Empresa Visita");
     setEmpresa(response.data);
+  };
+
+  const ConsultarKOCPIB = async () => {
+    const response = await catalogosComunes("IncidenciaKOCPIB");
+    setObtenerKOCPIB(response.data);
   };
 
   const Consultarusuarios = async () => {
@@ -125,6 +133,13 @@ const RegistrarCumple = (props) => {
     setDatos((anterior) => ({
       ...anterior,
       tipoIncidencia: e,
+    }));
+  };
+
+  const changeTipoIncidenciaKOCPIB = (e) => {
+    setDatos((anterior) => ({
+      ...anterior,
+      tipoIncidenciaKOCPIB: e,
     }));
   };
 
@@ -254,7 +269,21 @@ const RegistrarCumple = (props) => {
           </Typography>
           <form style={style.form}>
             <Grid container spacing={2}>
-              <Grid item xs={12} md={12}>
+              <Grid item xs={12} md={6}>
+                <ListSelector
+                  dataSource={ObtenerKOCPIB}
+                  selectedValue={datos.idTipoIncidenciaKOCPIB}
+                  label="Tipo Incidencia KOC o PIB:"
+                  onChange={(event, newValue) => {
+                    changeTipoIncidenciaKOCPIB(newValue);
+                  }}
+                  idField="id"
+                  textField="valor"
+                  isRequired={true}
+                  requiredLabel="Ingrese tipo incidencia"
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
                 <DatePicker
                   views={["year", "month", "day"]}
                   label="Mes, dia y año"
