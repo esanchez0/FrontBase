@@ -222,7 +222,7 @@ const RegistrarCumple = (props) => {
           type: "OPEN_SNACKBAR",
           openMensaje: {
             open: true,
-            mensaje: "Se registro exitosamente el Cumple años.",
+            mensaje: "Guardado exitoso!!!",
           },
         });
         ConsultarCumples();
