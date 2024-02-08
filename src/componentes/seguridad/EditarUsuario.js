@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Container, Typography, Grid, Button } from "@mui/material";
+import { Container, Typography, Grid, Button, TextField } from "@mui/material";
 import style from "../Tool/style";
 import { obtenerRoles, ActualizarUsuario } from "../../actions/UsuarioAction";
 import { v4 as uuidv4 } from "uuid";
@@ -8,6 +8,7 @@ import ListSelector from "../UI/ListSelector";
 import { useStateValue } from "../../contexto/store";
 import TextBox from "../UI/TextBox";
 import ControlAlert from "../UI/ControlAlert";
+import { styled } from "@mui/system";
 
 const EditarUsuario = (props) => {
   const [{ sesionUsuario, openSnackbar }, dispatch] = useStateValue();
@@ -33,6 +34,7 @@ const EditarUsuario = (props) => {
     nombreRol: "",
     idRol: "",
     perfilId: null,
+    confirmarEmail: "",
   });
 
   const IngresarValoresEnMemoria = (e) => {
@@ -49,7 +51,6 @@ const EditarUsuario = (props) => {
   //Para obtener el rolperfil y hablitar controles en la vista, precio e inmueble
   const [rolNombre, setrolNombre] = useState("");
   const [iniciaApp, setIniciaApp] = useState(true);
-  const [obtenerUsuarios, setObtenerUsuarios] = useState([]);
 
   useEffect(() => {
     const consultarRoles = async () => {
@@ -58,6 +59,7 @@ const EditarUsuario = (props) => {
     };
     consultarRoles();
     setDatos(props.AtributoData);
+    datos.confirmarEmail = props.AtributoData.email;
     setrolNombre(props.AtributoData.perfil);
     setuserNameOld(props.AtributoData.userName);
     setIniciaApp(false);
@@ -126,6 +128,29 @@ const EditarUsuario = (props) => {
       }
     }
 
+    if (datos.confirmarEmail === "") {
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingresar un email",
+      });
+    } else {
+      if (!isEmail(datos.confirmarEmail)) {
+        listaErrores.push({
+          id: uuidv4(),
+          descripcion: "Ingrese un email valido",
+        });
+        seterror("");
+      } else {
+        if (datos.confirmarEmail !== datos.email) {
+          listaErrores.push({
+            id: uuidv4(),
+            descripcion: "Los emails son diferentes",
+          });
+        } else {
+        }
+      }
+    }
+
     if (datos.userName === "") {
       listaErrores.push({
         id: uuidv4(),
@@ -159,37 +184,69 @@ const EditarUsuario = (props) => {
           type: "OPEN_SNACKBAR",
           openMensaje: {
             open: true,
-            mensaje: "Se guardaron exitosamente los cambios en Perfil Usuario",
+            mensaje: "Se guardaron exitosamente los cambios.",
           },
         });
         LimpiarCajas();
         props.AtributoCerrarModal();
         props.AtributoActualizarUsuarios();
+      } else if (response.status === 400) {
+        listaErrores.push({
+          id: uuidv4(),
+          descripcion: response.data.errores.mensaje,
+        });
+        settituloAlerta("Usuario Invalido");
+        setopenAlert(true);
       } else {
-        if (response.data.errores != undefined) {
-          dispatch({
-            type: "OPEN_SNACKBAR",
-            openMensaje: {
-              open: true,
-              mensaje: response.data.errores.mensaje,
-            },
-          });
-        } else {
-          Object.entries(response.data.errors).forEach(([key, value]) => {
-            mensajeFinal += `${value}` + " ";
-          });
-          dispatch({
-            type: "OPEN_SNACKBAR",
-            openMensaje: {
-              open: true,
-              mensaje: mensajeFinal,
-              // "Errores al intentar guardar en : " +
-              // Object.keys(response.data.errors),
-            },
-          });
-        }
+        Object.entries(response.data.errors).forEach(([key, value]) => {
+          mensajeFinal += `${value}` + " ";
+        });
+        dispatch({
+          type: "OPEN_SNACKBAR",
+          openMensaje: {
+            open: true,
+            mensaje: mensajeFinal,
+            // "Errores al intentar guardar en : " +
+            // Object.keys(response.data.errors),
+          },
+        });
       }
     });
+  };
+
+  const [emailConfirm, setemailConfirm] = useState("");
+  const [error, seterror] = useState("");
+
+  const DivRequeridValidation = styled("div")({
+    color: "white",
+    backgroundColor: "#FF7D33",
+    padding: 10,
+    marginbottom: 5,
+    textAlign: "center",
+    verticalAlign: "middle",
+    font: "text-danger",
+  });
+
+  const ValidateConfirmEmail = (e) => {
+    e.preventDefault();
+
+    if (!e.target.value) {
+      setemailConfirm("Ingresar un email");
+    } else {
+      if (!isEmail(e.target.value)) {
+        seterror("Ingrese un email valido");
+      } else {
+        if (e.target.value !== datos.email) {
+          setemailConfirm("Los emails son diferentes");
+        } else setemailConfirm("");
+        //seterror("");
+      }
+      // if (e.target.value !== datos.email) {
+      //   setemailConfirm("Los emails son diferentes");
+      // } else setemailConfirm("");
+    }
+
+    return error;
   };
 
   return (
@@ -250,7 +307,7 @@ const EditarUsuario = (props) => {
                 name="apellidoMaterno"
                 value={datos.apellidoMaterno || ""}
                 onChange={IngresarValoresEnMemoria}
-                label="Apellido Materno"              
+                label="Apellido Materno"
                 uppercase={true}
               ></TextBox>
             </Grid>
@@ -274,6 +331,24 @@ const EditarUsuario = (props) => {
                 validateEmail={true}
               ></TextBox>
             </Grid>
+            <Grid item xs={12} md={6}>
+              <TextField
+                id="confirmarEmail"
+                name="confirmarEmail"
+                value={datos.confirmarEmail || ""}
+                onChange={IngresarValoresEnMemoria}
+                onBlur={ValidateConfirmEmail}
+                label="Confirmar Email"
+                variant="outlined"
+                fullWidth
+              ></TextField>
+              {emailConfirm ? (
+                <DivRequeridValidation>
+                  {emailConfirm && <span className="err">{emailConfirm}</span>}
+                </DivRequeridValidation>
+              ) : null}
+            </Grid>
+
             <Grid item xs={12} md={6}>
               {/* <TextField
                 name="userName"

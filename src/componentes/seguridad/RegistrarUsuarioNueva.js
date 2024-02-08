@@ -158,7 +158,7 @@ const RegistrarUsuarioNueva = () => {
                     type: "OPEN_SNACKBAR",
                     openMensaje: {
                         open: true,
-                        mensaje: "Se elimino exitosamente el Cumple años.",
+                        mensaje: "Se elimino exitosamente el registro.",
                     },
                 });
                 Consultarusuarios();

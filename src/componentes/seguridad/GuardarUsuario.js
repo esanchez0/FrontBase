@@ -64,6 +64,7 @@ const GuardarUsuario = (props) => {
     confirmacionpassword: "",
     nombreRol: "",
     idRol: "",
+    confirmarEmail: "",
   });
 
   const LimpiarCajas = () => {
@@ -154,6 +155,28 @@ const GuardarUsuario = (props) => {
       }
     }
 
+    if (datos.confirmarEmail === "") {
+      listaErrores.push({
+        id: uuidv4(),
+        descripcion: "Ingresar un email",
+      });
+    } else {
+      if (!isEmail(datos.confirmarEmail)) {
+        listaErrores.push({
+          id: uuidv4(),
+          descripcion: "Ingrese un email valido",
+        });
+        seterror("");
+      } else {
+        if (datos.confirmarEmail !== datos.email) {
+          listaErrores.push({
+            id: uuidv4(),
+            descripcion: "Los emails son diferentes",
+          });       
+        } else{};
+      }
+    }
+
     if (datos.username === "") {
       listaErrores.push({
         id: uuidv4(),
@@ -197,6 +220,8 @@ const GuardarUsuario = (props) => {
 
     ValidarDatos(e);
 
+    console.log(listaErrores);
+
     if (listaErrores.length > 0) {
       setopenAlert(true);
       return;
@@ -217,6 +242,13 @@ const GuardarUsuario = (props) => {
         window.localStorage.setItem("token_seguridad", response.data.token);
         props.AtributoCerrarModal();
         props.AtributoActualizarUsuarios();
+      } else if (response.status === 400) {
+        listaErrores.push({
+          id: uuidv4(),
+          descripcion: response.data.errores.mensaje,
+        });
+        settituloAlerta("Usuario Invalido");
+        setopenAlert(true);       
       } else {
         dispatch({
           type: "OPEN_SNACKBAR",
@@ -259,6 +291,7 @@ const GuardarUsuario = (props) => {
 
   const [error, seterror] = useState("");
   const [errorConfirm, seterrorConfirm] = useState("");
+  const [emailConfirm, setemailConfirm] = useState("");
 
   const DivRequeridValidation = styled("div")({
     color: "white",
@@ -291,6 +324,28 @@ const GuardarUsuario = (props) => {
       if (e.target.value !== datos.password) {
         seterrorConfirm("Las contraseñas son diferentes");
       } else seterrorConfirm("");
+    }
+
+    return error;
+  };
+
+  const ValidateConfirmEmail = (e) => {
+    e.preventDefault();
+
+    if (!e.target.value) {
+      setemailConfirm("Ingresar un email");
+    } else {
+      if (!isEmail(e.target.value)) {
+        seterror("Ingrese un email valido");
+      } else {
+        if (e.target.value !== datos.email) {
+          setemailConfirm("Los emails son diferentes");
+        } else setemailConfirm("");
+        //seterror("");
+      }
+      // if (e.target.value !== datos.email) {
+      //   setemailConfirm("Los emails son diferentes");
+      // } else setemailConfirm("");
     }
 
     return error;
@@ -370,6 +425,24 @@ const GuardarUsuario = (props) => {
             </Grid>
 
             <Grid item xs={12} md={6}>
+              <TextField
+                id="confirmarEmail"
+                name="confirmarEmail"
+                value={datos.confirmarEmail || ""}
+                onChange={IngresarValoresMemoria}
+                onBlur={ValidateConfirmEmail}
+                label="Confirmar Email"
+                variant="outlined"
+                fullWidth
+              ></TextField>
+              {emailConfirm ? (
+                <DivRequeridValidation>
+                  {emailConfirm && <span className="err">{emailConfirm}</span>}
+                </DivRequeridValidation>
+              ) : null}
+            </Grid>
+
+            <Grid item xs={12} md={12}>
               {/* <TextField
                 name="username"
                 variant="outlined"
@@ -421,12 +494,6 @@ const GuardarUsuario = (props) => {
                   {error && <span className="err">{error}</span>}
                 </DivRequeridValidation>
               ) : null}
-              {/* <TextBoxPassword
-                name="password"
-                label="Ingrese su password"
-                value={datos.password}
-                onChange={IngresarValoresMemoria}
-              ></TextBoxPassword> */}
             </Grid>
 
             <Grid item xs={12} md={6}>
@@ -463,14 +530,6 @@ const GuardarUsuario = (props) => {
                   {errorConfirm && <span className="err">{errorConfirm}</span>}
                 </DivRequeridValidation>
               ) : null}
-              {/* <TextBoxPassword
-                name="confirmacionpassword"
-                label="Ingrese su password"
-                value={datos.confirmacionpassword}
-                onChange={IngresarValoresMemoria}
-                onBlur={ValidarPass}
-                passwordOriginal={passwordIgual}
-              ></TextBoxPassword> */}
             </Grid>
             <Grid item xs={12} md={6}>
               {/* <Autocomplete
