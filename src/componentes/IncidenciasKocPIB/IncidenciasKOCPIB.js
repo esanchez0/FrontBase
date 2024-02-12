@@ -159,6 +159,22 @@ const IncidenciasKOCPIB = () => {
         }),
       },
       {
+        accessorKey: "estatus",
+        header: "Estatus",
+        size: 140,
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
+        accessorKey: "idEstatus",
+        header: "IdEstatus",
+        size: 140,
+        muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
+          ...getCommonEditTextFieldProps(cell),
+        }),
+      },
+      {
         accessorKey: "tipoIncidenciaKOCPIB",
         header: "Tipo Incidencia KOC PIB",
         size: 140,
@@ -263,7 +279,7 @@ const IncidenciasKOCPIB = () => {
         }}
         columns={columns}
         data={obtenerDataGrid}
-        initialState={{ columnVisibility: { incidenciaKOCPBIId: false, idTipoIncidencia: false, idEmpresa: false, idSeReportoA: false, idAnalista: false } }}
+        initialState={{ columnVisibility: { incidenciaKOCPBIId: false,idEstatus: false, idTipoIncidencia: false, idEmpresa: false, idSeReportoA: false, idAnalista: false } }}
         enableColumnOrdering
         enableEditing
         // onEditingRowCancel={handleCancelRowEdits}

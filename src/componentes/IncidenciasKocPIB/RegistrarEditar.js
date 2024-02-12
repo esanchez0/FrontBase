@@ -29,6 +29,7 @@ const RegistrarCumple = (props) => {
   const [iniciaApp, setIniciaApp] = useState(true);
   const [Empresa, setEmpresa] = useState([]); //Combos
   const [TipoIncidente, setTipoIncidente] = useState([]); //Combos
+  const [Estatus, setEstatus] = useState([]); //Combos
   const [ObtenerUsuarios, setObtenerUsuarios] = useState([]); //Combos
   const [ObtenerKOCPIB, setObtenerKOCPIB] = useState([]); //Combos
 
@@ -56,6 +57,7 @@ const RegistrarCumple = (props) => {
     idSeReportoA: "",
     idAnalista: "",
     idTipoIncidenciaKOCPIB: "",
+    idEstatus:""
   });
 
   const IngresarValoresMemoria = (e) => {
@@ -87,6 +89,7 @@ const RegistrarCumple = (props) => {
     ConsultarEmpresas();
     Consultarusuarios();
     ConsultarKOCPIB();
+    ConsultarEstatus();
     setIniciaApp(false);
     if (props.AtributoAccion === "Edicion") {
       setAccion("Editar registro");
@@ -111,6 +114,11 @@ const RegistrarCumple = (props) => {
     setObtenerKOCPIB(response.data);
   };
 
+  const ConsultarEstatus = async () => {
+    const response = await catalogosComunes("Estatus");
+    setEstatus(response.data);
+  };
+
   const Consultarusuarios = async () => {
     const response = await ConsultarUsuariosBD();
     setObtenerUsuarios(response.data);
@@ -133,6 +141,13 @@ const RegistrarCumple = (props) => {
     setDatos((anterior) => ({
       ...anterior,
       idTipoIncidencia: e,
+    }));
+  };
+
+  const changeEstatus = (e) => {
+    setDatos((anterior) => ({
+      ...anterior,
+      idEstatus: e,
     }));
   };
 
@@ -392,6 +407,22 @@ const RegistrarCumple = (props) => {
                   requiredLabel="Ingrese analista"
                 />
               </Grid>
+
+              <Grid item xs={12} md={6}>
+                <ListSelector
+                  dataSource={Estatus}
+                  selectedValue={datos.idEstatus}
+                  label="Estatus:"
+                  onChange={(event, newValue) => {
+                    changeEstatus(newValue);
+                  }}
+                  idField="id"
+                  textField="valor"
+                  isRequired={true}
+                  requiredLabel="Ingrese un estatus"
+                />
+              </Grid>
+              
             </Grid>
             <Grid container justifyContent="center">
               <Grid item xs={12} md={6}>
