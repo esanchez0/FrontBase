@@ -147,11 +147,11 @@ const IncidenciasKOCPIB = () => {
   const columns = useMemo(
     () => [
       {
-        accessorKey: "id",
+        accessorKey: "incidenciaKOCPBIId",
         header: "ID",
       },
       {
-        accessorKey: "fecha",
+        accessorKey: "fechaYHora",
         header: "Fecha",
         size: 140,
         muiTableBodyCellEditTextFieldProps: ({ cell }) => ({
@@ -263,7 +263,7 @@ const IncidenciasKOCPIB = () => {
         }}
         columns={columns}
         data={obtenerDataGrid}
-        initialState={{ columnVisibility: { id: false, idTipoIncidencia: false, idEmpresa: false, idSeReportoA: false, idAnalista: false } }}
+        initialState={{ columnVisibility: { incidenciaKOCPBIId: false, idTipoIncidencia: false, idEmpresa: false, idSeReportoA: false, idAnalista: false } }}
         enableColumnOrdering
         enableEditing
         // onEditingRowCancel={handleCancelRowEdits}

@@ -47,15 +47,15 @@ const RegistrarCumple = (props) => {
   const [datos, setDatos] = useState({
     incidenciaKOCPBIId: "",
     fechaYHora: "",
-    tipoIncidencia: "",
+    idTipoIncidencia: "",
     nombre: "",
-    empresa: "",
+    idEmpresa: "",
     asunto: "",
     descripcion: "",
     conclusion: "",
-    seReportoA: "",
-    analista: "",
-    tipoIncidenciaKOCPIB: "",
+    idSeReportoA: "",
+    idAnalista: "",
+    idTipoIncidenciaKOCPIB: "",
   });
 
   const IngresarValoresMemoria = (e) => {
@@ -71,13 +71,13 @@ const RegistrarCumple = (props) => {
       incidenciaKOCPBIId: "",
       fechaYHora: "",
       nombre: "",
-      empresa: "",
-      tipoIncidencia: "",
+      idEmpresa: "",
+      idTipoIncidencia: "",
       asunto: "",
       // descripcion: "",
       conclusion: "",
-      seReportoA: "",
-      analista: "",
+      idSeReportoA: "",
+      idAnalista: "",
     });
   };
 
@@ -91,7 +91,7 @@ const RegistrarCumple = (props) => {
     if (props.AtributoAccion === "Edicion") {
       setAccion("Editar registro");
       setDatos(props.AtributoData);
-      console.log(props.AtributoData);
+      setValue(dayjs(props.AtributoData.fechaYHora));
     }
   }, [iniciaApp]);
 
@@ -125,35 +125,35 @@ const RegistrarCumple = (props) => {
   const changeEmpresa = (e) => {
     setDatos((anterior) => ({
       ...anterior,
-      empresa: e,
+      idEmpresa: e,
     }));
   };
 
   const changeTipoIncidencia = (e) => {
     setDatos((anterior) => ({
       ...anterior,
-      tipoIncidencia: e,
+      idTipoIncidencia: e,
     }));
   };
 
   const changeTipoIncidenciaKOCPIB = (e) => {
     setDatos((anterior) => ({
       ...anterior,
-      tipoIncidenciaKOCPIB: e,
+      idTipoIncidenciaKOCPIB: e,
     }));
   };
 
   const changeAquienReporta = (e) => {
     setDatos((anterior) => ({
       ...anterior,
-      seReportoA: e,
+      idSeReportoA: e,
     }));
   };
 
   const changeAnalista = (e) => {
     setDatos((anterior) => ({
       ...anterior,
-      analista: e,
+      idAnalista: e,
     }));
   };
 
@@ -178,14 +178,14 @@ const RegistrarCumple = (props) => {
       });
     }
 
-    if (datos.empresa === "" || datos.empresa === null) {
+    if (datos.idEmpresa === "" || datos.idEmpresa === null) {
       listaErrores.push({
         id: uuidv4(),
         descripcion: "Ingrese una empresa",
       });
     }
 
-    if (datos.tipoIncidencia === "" || datos.tipoIncidencia === null) {
+    if (datos.idTipoIncidencia === "" || datos.idTipoIncidencia === null) {
       listaErrores.push({
         id: uuidv4(),
         descripcion: "Ingrese una tipoIncidencia",
@@ -206,14 +206,14 @@ const RegistrarCumple = (props) => {
       });
     }
 
-    if (datos.seReportoA === "" || datos.seReportoA === null) {
+    if (datos.idSeReportoA === "" || datos.idSeReportoA === null) {
       listaErrores.push({
         id: uuidv4(),
         descripcion: "Ingrese una persona a quien reporta",
       });
     }
 
-    if (datos.analista === "" || datos.analista === null) {
+    if (datos.idAnalista === "" || datos.idAnalista === null) {
       listaErrores.push({
         id: uuidv4(),
         descripcion: "Ingrese una persona analista",
@@ -230,6 +230,9 @@ const RegistrarCumple = (props) => {
       setopenAlert(true);
       return;
     }
+
+    console.log(datos);
+    //  return;
 
     RegistrarActualizarIncidencia(datos).then((response) => {
       if (response.status === 200) {
@@ -285,6 +288,7 @@ const RegistrarCumple = (props) => {
               </Grid>
               <Grid item xs={12} md={6}>
                 <DatePicker
+                  name="fechaYHora"
                   views={["year", "month", "day"]}
                   label="Mes, dia y año"
                   value={value}
